@@ -3,7 +3,7 @@
 <h1 align="center">Intel® AI Assistant Builder<br>(a.k.a. SuperBuilder)</h1>
 
 <p align="justify"><strong>Intel® AI Assistant Builder</strong>—also known as <strong>SuperBuilder</strong>—is Intel’s Gen-AI reference design platform that enables the rapid creation of custom AI assistants and agents tailored to specific industry needs and proprietary data.
-These assistants streamline everyday tasks and deliver intelligent solutions by leveraging your internal knowledge bases—<strong>all while running entirely locally</strong> on Intel®-based AI PCs. Your data and workflows remain private and secure, powered by cutting-edge large language models (LLMs), customizable agentic workflows, and performance-optimized processing.</p>
+These assistants streamline everyday tasks and deliver intelligent solutions by leveraging your internal knowledge bases on Intel®-based AI PCs. Your data and workflows remain private and secure, powered by cutting-edge large language models (LLMs), customizable agentic workflows, and performance-optimized processing.</p>
 
 <a name="toc"></a>
 
@@ -18,11 +18,18 @@ These assistants streamline everyday tasks and deliver intelligent solutions by 
   - [API Documentation](#api-documentation)
 - [LLM Models and Recommendations](#llm-models-and-recommendations)
 - [Platform Capabilities](#platform-capabilities)
-- [Coming Soon](#coming-soon)
+- [:bulb: **Coming Soon** :sparkles:](#bulb-coming-soon-sparkles)
 - [Help and Troubleshooting](#help-and-troubleshooting)
 - [What's New](#whats-new)
-  - [Latest Release (Version 2.0.0)](#latest-release-version-200)
+  - [Latest Release (Version 2.2.0)](#latest-release-version-220)
   - [Earlier Versions](#earlier-versions)
+      - [Version 2.1.0](#version-210)
+      - [Version 2.0.0](#version-200)
+      - [Version 1.2.2](#version-122)
+      - [Version 1.2.1](#version-121)
+      - [Version 1.2.0](#version-120)
+      - [Version 1.1](#version-11)
+      - [Version 1.0](#version-10)
 - [Get Support](#get-support)
 
 
