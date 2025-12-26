@@ -42,14 +42,20 @@ try {
   // Set up argv for the bundled CLI
   process.argv = [process.argv[0], 'markmap', ...args];
   
-  // Load the bundled CLI and call main() function
-  const { main } = require('./bundled/index.js');
+  // Load the bundled CLI
+  // The newer versions (cli.js) run directly on require, older versions (index.js) export a main function
+  const bundled = require('./bundled/index.js');
   
-  // Execute the main function (it returns a Promise)
-  main().catch(err => {
-    console.error('Markmap execution error:', err);
-    process.exit(1);
-  });
+  // If there's a main or markmap function, call it
+  const entryFn = bundled.main;
+  if (entryFn && typeof entryFn === 'function') {
+    entryFn().catch(err => {
+      console.error('Markmap execution error:', err);
+      process.exit(1);
+    });
+  }
+  // Otherwise, the CLI should have already run when we required it
+  
   
 } catch (error) {
   console.error('Failed to execute markmap:', error.message);

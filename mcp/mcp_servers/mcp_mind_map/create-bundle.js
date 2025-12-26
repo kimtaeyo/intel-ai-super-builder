@@ -18,8 +18,18 @@ fs.mkdirSync(bundleDir, { recursive: true });
 
 console.log('Bundling markmap-cli with esbuild...');
 
+// Determine entry point - new versions use cli.js, old versions use index.js
+let entryPoint;
+try {
+  entryPoint = require.resolve('markmap-cli/dist/cli.js');
+  console.log('Using CLI entry point: dist/cli.js');
+} catch {
+  entryPoint = require.resolve('markmap-cli/dist/index.js');
+  console.log('Using legacy entry point: dist/index.js');
+}
+
 esbuild.build({
-  entryPoints: [require.resolve('markmap-cli/dist/index.js')],
+  entryPoints: [entryPoint],
   bundle: true,
   platform: 'node',
   target: 'node18',
