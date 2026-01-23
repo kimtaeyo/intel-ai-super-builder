@@ -56,8 +56,12 @@ These assistants streamline everyday tasks and deliver intelligent solutions by 
   | Graphics      | Integrated Intel® Graphics                                   | Integrated Intel® Arc™ Graphics             |
   | Network       | Broadband connection for LLMs and other components’ download |                                             |
 > [!NOTE]
->  * Intel® AI Super Builder has been validated on a limited set of Intel AIPC: MTL, LNL, and ARL systems.
-> * Minimum Intel Graphics driver version is **30.0.100.9955** and minimum NPU driver version is **32.0.100.4239**.
+>  * Intel® AI Super Builder has been validated on a limited set of Intel AIPC: MTL, LNL, ARL and PTL systems.
+> * Minimum driver versions required:
+>   * Intel Graphics: **32.0.101.8132**
+>   * NPU: **32.0.100.4239**
+> * Latest drivers are recommended for optimal performance.
+
 
 ### Software Requirements
   Intel® AI Super Builder has been validated for use on **Microsoft Windows 11 version 23H2 or newer**. During the installation process, Intel® AI Super Builder application may download and install required components.
