@@ -159,7 +159,7 @@ For comprehensive troubleshooting guidance, installation tips, and a complete li
 ## What's New
 ### Latest Release (Version 2.8.0 for OVMS)
 - Introduce additional embedding and reranking models — Qwen3-Embedding-0.6B and Qwen3-Reranker-0.6B.
-- Improve pdf parsing with pypdfium2 and pdfplumber.
+- Improve PDF parsing with pypdfium2 and pdfplumber.
 - Improve summarization performance for large PDFs.
 - Improve UX.
 - Bug Fixes and Security Updates.
