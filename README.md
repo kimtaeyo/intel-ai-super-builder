@@ -21,7 +21,7 @@ These assistants streamline everyday tasks and deliver intelligent solutions by 
 - [Coming Soon](#coming-soon)
 - [Help and Troubleshooting](#help-and-troubleshooting)
 - [What's New](#whats-new)
-  - [Latest Release (Version 2.8.0)](#latest-release-version-280-for-ovms)
+  - [Latest Release (Version 2.8.0)](#latest-release-version-280)
 - [Get Support](#get-support)
 
 ## Why Choose Intel® AI Super Builder?
@@ -54,7 +54,7 @@ These assistants streamline everyday tasks and deliver intelligent solutions by 
 > [!NOTE]
 >  * Intel® AI Super Builder has been validated on a limited set of Intel AIPC: MTL, LNL, ARL and PTL systems.
 > * Minimum driver versions required:
->   * Intel Graphics: **32.0.101.8132**
+>   * Intel Graphics: **32.0.101.8531**
 >   * NPU: **32.0.100.4239**
 > * Latest drivers are recommended for optimal performance.
 
@@ -157,13 +157,13 @@ For comprehensive troubleshooting guidance, installation tips, and a complete li
 <br>
 
 ## What's New
-### Latest Release (Version 2.8.0 for OVMS)
+### Latest Release (Version 2.8.0)
 - Introduce additional embedding and reranking models — Qwen3-Embedding-0.6B and Qwen3-Reranker-0.6B.
 - Improve PDF parsing with pypdfium2 and pdfplumber.
 - Improve summarization performance for large PDFs.
 - Improve UX.
 - Bug Fixes and Security Updates.
-- Upgrade model service version — OVMS v2026.0
+- Upgrade model service version — OVMS v2026.0 and llama.cpp b7992
 
 ## Get Support
 For technical questions and feature requests, please use GitHub [Issues](https://github.com/intel/intel-ai-super-builder/issues).
