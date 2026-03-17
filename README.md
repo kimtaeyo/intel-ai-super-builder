@@ -21,11 +21,7 @@ These assistants streamline everyday tasks and deliver intelligent solutions by 
 - [Coming Soon](#coming-soon)
 - [Help and Troubleshooting](#help-and-troubleshooting)
 - [What's New](#whats-new)
-  - [Latest Release (Version 2.7.0)](#latest-release-version-270)
-  - [Earlier Versions](#earlier-versions)
-      - [Version 2.2.0 ⬇️ App Download ⬇️ API Service Download](#version-220-️-app-download-️-api-service-download)
-      - [Version 2.1.0 ⬇️ App Download ⬇️ API Service Download](#version-210-️-app-download-️-api-service-download)
-      - [Version 2.0.0 ⬇️ App Download ⬇️ API Service Download](#version-200-️-app-download-️-api-service-download)
+  - [Latest Release (Version 2.8.0)](#latest-release-version-280)
 - [Get Support](#get-support)
 
 ## Why Choose Intel® AI Super Builder?
@@ -161,42 +157,13 @@ For comprehensive troubleshooting guidance, installation tips, and a complete li
 <br>
 
 ## What's New
-### Latest Release (Version 2.7.0)
-- Combining domain related versions into a single installer **Intel AI Super Builder - OpenVINO**
-- Introducing new experimental support for GGUF models **Intel AI Super Builder - GGUF**
-- Introducing MCP Safety through enhanced transparency of MCP Tools
-
-### Earlier Versions
-##### Version 2.2.0 [⬇️ App Download](https://aibuilder.intel.com/installers/Intel(R)%20AI%20Assistant%20Builder_Installer_SA_2.2.0.1113.exe) [⬇️ API Service Download](https://aibuilder.intel.com/installers/Intel(R)%20AI%20Assistant%20Builder_Service_Installer_SA_2.2.0.1113.exe)
-- MCP marketplace integration with Modelscope
-- Japanese language support
-- Wider support for MCP executables
-
-##### Version 2.1.0 [⬇️ App Download](https://aibuilder.intel.com/installers/Intel(R)%20AI%20Assistant%20Builder_Installer_SA_2.1.0.925.exe) [⬇️ API Service Download](https://aibuilder.intel.com/installers/Intel(R)%20AI%20Assistant%20Builder_Service_Installer_SA_2.1.0.925.exe)
-- Dark/Light mode sync with Windows Settings
-- Enhanced GPU device support
-- Knowledge Base compatibility fixes
-
-##### Version 2.0.0 [⬇️ App Download](https://aibuilder.intel.com/installers/Intel(R)%20AI%20Assistant%20Builder_Installer_SA_2.0.0.902.exe) [⬇️ API Service Download](https://aibuilder.intel.com/installers/Intel(R)%20AI%20Assistant%20Builder_Service_Installer_SA_2.0.0.902.exe)
-
-- Introducing MCP Support:
-We've added Model Control Protocol (MCP) support, enabling seamless import/export of MCP servers and agents, improved error handling, and enhanced UI/UX for managing workflows. This lays the foundation for more flexible agent-based orchestration and integration with external systems.
-
-- Introducing New OVMS Backend
-A new OpenVINO Model Server (OVMS) backend has been integrated into the system. This provides better scalability, cache handling for NPU/GPU models, and improved process management. It ensures more efficient model loading and execution, especially for large-scale workloads.
-
-- Introducing Support for New Models
-This release expands compatibility with Qwen3 (now the recommended model), and new NPU model configurations. These additions broaden the model ecosystem and improve flexibility for different use cases.
-
-- New Workflows UI
-A Custom Workflows UI has been introduced, providing users with more intuitive control over query flows, agent behaviors, and task automation. Enhancements include reusable components, better active file management, clickable references, and clear visual cues to differentiate current vs. recommended models. The MW and Backend APIs have been updated to improve clarity and simplify integrations.
-
-- Improved Summarization & OOM Handling
-Summarization has been significantly upgraded to include more context with multi-level and direct keyword-focused modes.
-Overflow token and stop-chat handling fixes have been added to address out-of-memory (OOM) errors.
-
-- Bug Fixes
-This release addresses a wide range of issues, including CSV encoding errors, security vulnerabilities and regressions caused by dependency upgrades. These fixes collectively improve reliability and user experience across the platform.
+### Latest Release (Version 2.8.0 for OVMS)
+- Introduce additional embedding and reranking models — Qwen3-Embedding-0.6B and Qwen3-Reranker-0.6B.
+- Improve pdf parsing with pypdfium2 and pdfplumber.
+- Improve summarization performance for large PDFs.
+- Improve UX.
+- Bug Fixes and Security Updates.
+- Upgrade model service version — OVMS v2026.0
 
 ## Get Support
 For technical questions and feature requests, please use GitHub [Issues](https://github.com/intel/intel-ai-super-builder/issues).
