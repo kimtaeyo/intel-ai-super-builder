@@ -21,7 +21,7 @@ These assistants streamline everyday tasks and deliver intelligent solutions by 
 - [Coming Soon](#coming-soon)
 - [Help and Troubleshooting](#help-and-troubleshooting)
 - [What's New](#whats-new)
-  - [Latest Release (Version 2.8.0)](#latest-release-version-280)
+  - [Latest Release (Version 2.8.0)](#latest-release-version-280-for-ovms)
 - [Get Support](#get-support)
 
 ## Why Choose Intel® AI Super Builder?
