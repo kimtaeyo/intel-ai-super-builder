@@ -1,6 +1,6 @@
 [package]
 name = "IntelAIA"
-version = "2.7.0"
+version = "2.8.0"
 description = "Intel(R) AI Super Builder"
 authors = ["Intel Corp"]
 edition = "2021"
@@ -23,6 +23,7 @@ tonic-build = "0.12"
 
 [dependencies]
 tauri = { version = "2.2.5", features = [] }
+tauri-plugin-single-instance = "2.0.0"
 tauri-plugin-shell = "2"
 tauri-plugin-opener = "2"
 tauri-plugin-fs = "2"

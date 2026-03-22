@@ -11,6 +11,13 @@
   margin: 0 auto;
 }
 
+.download-status-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+} 
+
 .consent-container {
   word-break: normal;
 }

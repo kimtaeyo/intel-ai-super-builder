@@ -1,124 +1,124 @@
 .active-files-container {
-    /* width: 100%; */
-    flex-shrink: 0;
-    height: auto;
-    border: 1px rgb(218, 218, 218) solid;
-    box-shadow: 1px 2px 2px 1px rgb(236, 236, 236);
-    border-radius: 10px;
-    font-family: "IntelOne Display", sans-serif;
-    font-size: 13px;
+  /* width: 100%; */
+  flex-shrink: 0;
+  height: auto;
+  border: 1px rgb(218, 218, 218) solid;
+  box-shadow: 1px 2px 2px 1px rgb(236, 236, 236);
+  border-radius: 10px;
+  font-family: 'IntelOne Display', sans-serif;
+  font-size: 13px;
 }
 
 .expand-container {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    align-items: center;
-    margin: 0;
-    padding: 0;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+  margin: 0;
+  padding: 0;
 }
 
 .click-to-expand {
-    display: flex;
-    flex-direction: row;
-    cursor: pointer;
-    flex-grow: 1;
-    gap: 5px;
-    align-items: center;
-    padding: 3px 6px 3px 6px;
-    box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  cursor: pointer;
+  flex-grow: 1;
+  gap: 5px;
+  align-items: center;
+  padding: 3px 6px 3px 6px;
+  box-sizing: border-box;
 }
 
 .active-file-text {
-    font-size: small;
-    padding-left: 30px;
+  font-size: small;
+  padding-left: 30px;
 }
 
 .active-file-icon-button {
-    background-color: rgb(243, 243, 243);
-    border-radius: 25px;
-    width: 25px;
-    height: 25px;
-    padding: 3px;
-    margin-bottom: 2px;
-    display: flex;
-    cursor: pointer;
+  background-color: rgb(243, 243, 243);
+  border-radius: 25px;
+  width: 25px;
+  height: 25px;
+  padding: 3px;
+  margin-bottom: 2px;
+  display: flex;
+  cursor: pointer;
 }
 
 .active-file-icon-button:hover {
-    background-color: rgb(247, 247, 247);
+  background-color: rgb(247, 247, 247);
 }
 
 .expand-text-title {
-    font-weight: 1000;
-    margin-right: 5px;
+  font-weight: 1000;
+  margin-right: 5px;
 }
 
 .expand-text {
-    font-size: 15px;
-    color: var(--text-secondary-color);
-    user-select: none;
-    font-family: "IntelOne Display", sans-serif;
-    width: 100%;
+  font-size: 15px;
+  color: var(--text-secondary-color);
+  user-select: none;
+  font-family: 'IntelOne Display', sans-serif;
+  width: 100%;
 }
 
 .expand-text .MuiSvgIcon-root {
-    display: inline-block;
-    vertical-align: middle;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .active-file-count-text {
-    background-color: var(--text-secondary-color);
-    /* color: white; */
-    width: 10px;
-    height: 10px;
-    padding-left: 7px;
-    padding-right: 7px;
-    border-radius: 20px;
+  background-color: rgb(243, 243, 243);
+  /* color: white; */
+  width: 10px;
+  height: 10px;
+  padding-left: 7px;
+  padding-right: 7px;
+  border-radius: 20px;
 }
 
 .has-active-files {
-    color: var(--primary-text-color);
-    background-color: var(--primary-main-color);
+  color: var(--primary-text-color);
+  background-color: var(--primary-main-color);
 }
 
 .file-type-text {
-    font-size: 10px;
-    margin-right: 5px;
-    color: rgb(92, 92, 92);
-    user-select: none;
-    text-align: right;
-    width: 40%;
-    align-items: flex-end;
+  font-size: 10px;
+  margin-right: 5px;
+  color: rgb(92, 92, 92);
+  user-select: none;
+  text-align: right;
+  width: 40%;
+  align-items: flex-end;
 }
 
 .expand-text:hover {
-    cursor: pointer;
-    color: var(--text-primary-color);
+  cursor: pointer;
+  color: var(--text-primary-color);
 }
 
 .active-file-table-container {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-height: 40vh;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: 40vh;
 }
 
 .active-file-table-loading {
-    min-height: 20vh;
+  min-height: 20vh;
 }
 
 .empty-file-table-container {
-    display: flex;
-    width: 100%;
-    /* cursor: pointer; */
-    user-select: none;
-    align-items: center;
-    vertical-align: middle;
-    padding: 10px;
-    gap: 10px;
-    color: var(--text-secondary-color);
-    box-sizing: border-box;
+  display: flex;
+  width: 100%;
+  /* cursor: pointer; */
+  user-select: none;
+  align-items: center;
+  vertical-align: middle;
+  padding: 10px;
+  gap: 10px;
+  color: var(--text-secondary-color);
+  box-sizing: border-box;
 }
 
 /* .empty-file-table-container:hover {
@@ -126,5 +126,5 @@
 } */
 
 .file-link {
-    cursor: pointer;
+  cursor: pointer;
 }

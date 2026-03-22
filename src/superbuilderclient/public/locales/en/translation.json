@@ -52,16 +52,19 @@
   "mcp": {
     "ui": {
       "back": "Back to Super Agent",
-      "mcp_marketplace": "MCP Marketplace",
+      "back-to-manager": "Back to MCP Manager",
+      "mcp_marketplace": "Add from MCP Marketplace",
       "add": "Add MCP Server",
-      "edit": "Edit MCP server info",
+      "edit": "Edit MCP Server",
       "remove": "Remove MCP Server",
+      "cannot_remove_servers_tooltip": "Remove MCP servers. Ensure any MCP Agents using the server are removed first.",
+      "cannot_remove_agents_tooltip": "Remove MCP Agents. Stop the MCP Agent before removing.",
       "mcp_server": "MCP Server",
       "mcp_server_name": "MCP Server Name",
       "mcp_server_url": "MCP Server URL",
       "mcp_server_env": "Environment Variables (Optional)",
-      "mcp_server_env_placeholder": "e.g. MY_ENV_1=My_ENV_VALUE_1 MY_ENV_2=My_ENV_VALUE_2",
-      "mcp_server_env_error": "Environment variable format should be KEY=VALUE",
+      "mcp_server_env_placeholder": "e.g. {\"KEY1\":\"val1\",\"KEY2\":\"val2\"} or KEY1=val1 KEY2=val2",
+      "mcp_server_env_error": "Invalid format. Use JSON {\"KEY\":\"value\"}, KEY=VALUE, or KEY:VALUE (space-separated)",
       "mcp_server_command": "MCP Server Command",
       "mcp_server_command_args": "MCP Server Command Args (Optional)",
       "mcp_server_info": "Info from MCP Server",
@@ -78,6 +81,7 @@
       "add_agent": "Add new MCP Agent Info",
       "edit_agent": "Edit MCP Agent Info",
       "add_agent_button": "Add Agent",
+      "header_remove_agent_button": "Remove Agent",
       "mcp_agent_name": "MCP Agent Name",
       "mcp_agent_description": "Description",
       "mcp_agent_system_prompt": "System Prompt",
@@ -88,10 +92,18 @@
       "confirm_remove_message": "Please confirm to remove the selected",
       "remove_button": "Remove",
       "docker_recommendation_title": "Recommended:",
-      "docker_recommendation_description": "For better security and isolation, consider using the Command method with Docker to add MCP servers (Requires Docker Desktop).",
+      "docker_recommendation_description": "For better security and isolation, consider using the Command method with Docker (Requires Docker Desktop).",
       "docker_recommendation_visit": "Visit",
       "docker_servers_link": "Docker MCP Hub",
-      "docker_recommendation_suffix": "Note: Docker Desktop must be installed on your system."
+      "docker_recommendation_suffix": "Note: Docker Desktop must be installed on your system.",
+      "guide_button": "Quick Guide",
+      "guide_title": "Getting Started with MCP Manager",
+      "guide_step1_title": "Step 1 — Add MCP Server",
+      "guide_step1_desc": "Click the \"Add MCP Server\" button in the MCP Servers table. Fill in the server name and command. Make sure all required fields are correct before clicking \"Add.\"",
+      "guide_step2_title": "Step 2 — Add MCP Agent",
+      "guide_step2_desc": "Click the \"Add Agent\" button in the MCP Agents table. Give the agent a name and description, then select one or more MCP Servers from the list. At least one server must be selected to start the agent.",
+      "guide_step3_title": "Step 3 — Start MCP Agent",
+      "guide_step3_desc": "Find your agent in the MCP Agents table and click the \"Start\" button. The agent will connect to its configured MCP servers and become ready for use in the chat."
     },
     "tools_dialog": {
       "title": "MCP Server Tools",
@@ -150,7 +162,7 @@
       "added": "Added",
       "running": "Running",
       "empty": "No marketplace items available",
-      "search": "Search by name, publisher, keywords...",
+      "search": "Search",
       "showing_results": "Showing results",
       "no_results": "No results found",
       "clear_search": "Clear search",
@@ -296,14 +308,14 @@
       "other": "Other Models",
       "current": {
         "currentllm": "Current LLM",
-        "currentllm_tips": "*Model download might be triggered upon change",
+        "currentllm_tips": "Model download may be triggered upon change",
         "embedding": "Current Embedding Model",
         "embedding_tips": "*Model download might be triggered upon change",
         "ranker": "Current Reranker Model",
         "ranker_tips": "*Model download might be triggered upon change",
         "endpoint": "Model Download Endpoint",
-        "endpoint_tips1": "If you have trouble downloading, please try a different download endpoint.",
-        "endpoint_tips2": "For China mainland users, please choose modelscope endpoint.",
+        "endpoint_tips1": "Trouble downloading? Try a different endpoint.",
+        "endpoint_tips2": "Mainland China users, select ModelScope endpoint.",
         "no_other_model": "No other models available",
         "loading": "Loading ",
         "all_models": "All Models"
@@ -318,7 +330,7 @@
         "method_copy": "Copy folder",
         "method_move": "Move folder",
         "upload_button": "Upload Model",
-        "upload_button_tips": "*The user is responsible for ensuring the accuracy of the model*",
+        "upload_button_tips": "User is responsible for ensuring the accuracy of the model",
         "conversion": "Model Conversion",
         "select_a_folder": "Select a Folder",
         "tips": "Click here to learn how to upload your own model"
@@ -349,6 +361,12 @@
           "remove": "Remove",
           "cancel": "Cancel"
         }
+      },
+      "embedding_switch": {
+        "title": "Confirm Embedding Model Switch",
+        "content": "Switching the embedding model will delete the existing knowledge base data (vector database). All previously embedded documents will need to be re-added. Do you want to continue?",
+        "confirm": "Confirm",
+        "cancel": "Cancel"
       }
     },
     "parameters": {

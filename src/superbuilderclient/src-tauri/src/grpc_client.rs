@@ -1112,17 +1112,17 @@ pub async fn add_mcp_agent(
     agent_name: String,
     agent_desc: String,
     agent_message: String,
-    server_ids: Vec<i32>
+    server_names: Vec<String>
 ) -> Result<super_builder::AddMcpAgentResponse, String> {
     let mut client_guard = client.lock().await;
     let client_ref = client_guard.as_mut().ok_or("Client not initialized")?;
 
     let agent = super_builder::McpAgent {
-        id: 0, // Set to 0 for new agents, the backend will assign the actual ID
+        //backend will assign the actual ID
         name: agent_name,
         desc: agent_desc,
         message: agent_message,
-        server_ids,
+        server_names: server_names,
     };
 
     let request = super_builder::AddMcpAgentRequest {
@@ -1140,24 +1140,24 @@ pub async fn add_mcp_agent(
 #[tauri::command]
 pub async fn edit_mcp_agent(
     client: State<'_, SharedClient>,
-    agent_id: i32,
+    editing_agent_name: String, 
     agent_name: String,
     agent_desc: String,
     agent_message: String,
-    server_ids: Vec<i32>
+    server_names: Vec<String>
 ) -> Result<String, String> {
     let mut client_guard = client.lock().await;
     let client_ref = client_guard.as_mut().ok_or("Client not initialized")?;
 
     let agent = super_builder::McpAgent {
-        id: agent_id,
         name: agent_name,
         desc: agent_desc,
         message: agent_message,
-        server_ids,
+        server_names,
     };
 
     let request = super_builder::EditMcpAgentRequest {
+        editing_agent_name,
         agent: Some(agent),
     };
 
@@ -1267,7 +1267,7 @@ pub async fn get_mcp_servers(client: State<'_, SharedClient>) -> Result<String, 
 #[tauri::command]
 pub async fn add_mcp_server(
     client: State<'_, SharedClient>,
-    server_name: String,
+    name: String,
     command: String,
     args: String,
     url: String,
@@ -1277,8 +1277,8 @@ pub async fn add_mcp_server(
     let client_ref = client_guard.as_mut().ok_or("Client not initialized")?;
 
     let server = super_builder::McpServer {
-        id: 0, // Set to 0 for new servers, the backend will assign the actual ID
-        server_name,
+        // backend will assign the actual ID
+        name,
         command,
         args,
         url,
@@ -1300,8 +1300,8 @@ pub async fn add_mcp_server(
 #[tauri::command]
 pub async fn edit_mcp_server(
     client: State<'_, SharedClient>,
-    id: i32, // int32 required for GRPC
-    server_name: String,
+    editing_server_name: String,
+    name: String,
     command: String,
     args: String,
     url: String,
@@ -1311,8 +1311,7 @@ pub async fn edit_mcp_server(
     let client_ref = client_guard.as_mut().ok_or("Client not initialized")?;
 
     let server = super_builder::McpServer {
-        id,
-        server_name,
+        name,
         command,
         args,
         url,
@@ -1320,6 +1319,7 @@ pub async fn edit_mcp_server(
     };
 
     let request = super_builder::EditMcpServerRequest {
+        editing_server_name,
         server: Some(server),
     };
 

@@ -104,7 +104,6 @@ const DownloadBody = ({
   return (
     <div className="download-body">
       <CommitIdNotification />
-
       {downloadStatus === "Awaiting consent to download models" &&
         !downloadConsent &&
         downloadData?.missing_models?.length > 0 && (
@@ -162,7 +161,7 @@ const DownloadBody = ({
         <>
           {downloadStatus === "Downloading" && (
             <div className="download-status-container">
-              <CircularProgress size={50} sx={{ mr: 2 }} />
+              <CircularProgress size={50} sx={{ mr: 2, flexShrink: 0 }} />
               <Typography variant="body1" className="download-status-text">
                 {t("model_downloader.body.status_downloading")} {fileDownload}
                 ... {progress}%
@@ -242,7 +241,7 @@ const DownloadBody = ({
           {downloadStatus !== "Downloading" && (
             <div className="setup-complete-button-group">
               {downloadStatus === "All downloads complete" ||
-              downloadStatus === "Nothing to download!" ? (
+                downloadStatus === "Nothing to download!" ? (
                 <Button size="m" variant="contained" onClick={handleClose} data-testid="model-download-complete-button">
                   <CheckCircleOutlineIcon
                     sx={{ fontSize: 18, verticalAlign: "middle", mr: 1 }}

@@ -1,12 +1,21 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
-import "./Feedback.css";
-import { invoke } from "@tauri-apps/api/core";
-import { ChatContext } from "../context/ChatContext";
-import { EmailWindowContext } from "../context/EmailWindowContext";
-import { FileManagementContext } from "../context/FileManagementContext";
+import React, { useState, useEffect, useContext, useRef } from 'react';
+import './Feedback.css';
+import { invoke } from '@tauri-apps/api/core';
+import { ChatContext } from '../context/ChatContext';
+import { EmailWindowContext } from '../context/EmailWindowContext';
+import { FileManagementContext } from '../context/FileManagementContext';
 import { useTranslation } from 'react-i18next';
 
-const FeedbackRow = ({ question, message, messageIndex, resubmitQuestion, enableSendFeedback=false, enableEmail=true, markdownRef }) => {
+const FeedbackRow = ({
+  question,
+  message,
+  messageIndex,
+  resubmitQuestion,
+  enableSendFeedback = false,
+  enableEmail = true,
+  markdownRef,
+  metricsContext,
+}) => {
   const { t } = useTranslation();
   const { setIsChatReady, isChatReady } = useContext(ChatContext);
   const { updateTable } = useContext(FileManagementContext);
@@ -15,30 +24,27 @@ const FeedbackRow = ({ question, message, messageIndex, resubmitQuestion, enable
 
   // Build up the feedback row available functions based on props passed in
   let logos = [
-    { alt: "/path/to/logo4.png", function: "feedback-refresh" },
-    { alt: "/path/to/logo5.png", function: "feedback-copy" },
+    { alt: '/path/to/logo4.png', function: 'feedback-refresh' },
+    { alt: '/path/to/logo5.png', function: 'feedback-copy' },
   ];
   if (enableSendFeedback) {
-    logos = [ 
-      { alt: "/path/to/logo1.png", function: "feedback-thumbs-up" },
-      { alt: "/path/to/logo2.png", function: "feedback-thumbs-down" },
-      { alt: "/path/to/logo3.png", function: "feedback-divider" },
+    logos = [
+      { alt: '/path/to/logo1.png', function: 'feedback-thumbs-up' },
+      { alt: '/path/to/logo2.png', function: 'feedback-thumbs-down' },
+      { alt: '/path/to/logo3.png', function: 'feedback-divider' },
       ...logos,
     ];
   }
   if (enableEmail) {
-    logos = [
-      ...logos,
-      { alt: "email", function: "feedback-email" },
-    ];
+    logos = [...logos, { alt: 'email', function: 'feedback-email' }];
   }
-  const quickposfeedback = ["Nice", "It's correct!", "Thanks!"];
-  const quicknegfeedback = ["Incorrect", "Incomplete", "Misleading"];
-  const [input, setInput] = useState(""); //for reading in text
+  const quickposfeedback = ['Nice', "It's correct!", 'Thanks!'];
+  const quicknegfeedback = ['Incorrect', 'Incomplete', 'Misleading'];
+  const [input, setInput] = useState(''); //for reading in text
   const [showInput, setShowInput] = useState(false); //for if the dialog box is active or not
   const [feedbackInfo, setFeedbackInfo] = useState({
-    chatbotResponse: "",
-    functionName: "",
+    chatbotResponse: '',
+    functionName: '',
   }); //to maintain info retrieved from chat throughout instance.
   const [feedbackReceived, setFeedbackReceived] = useState(false);
   const [fadeOut, setFadeOut] = useState(false); // State to control fade-out effect
@@ -52,11 +58,11 @@ const FeedbackRow = ({ question, message, messageIndex, resubmitQuestion, enable
 
   useEffect(() => {
     if (showInput && inputRef.current) {
-      inputRef.current.scrollIntoView({ behavior: "smooth" });
+      inputRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [showInput]);
 
-  const handleQButtonClick = (buttonText) => {
+  const handleQButtonClick = buttonText => {
     setInput(buttonText);
     // setQButtons(qButtons.filter(button => button !== buttonText));  // Remove button after clicked
   };
@@ -71,11 +77,11 @@ const FeedbackRow = ({ question, message, messageIndex, resubmitQuestion, enable
   };
 
   /**************** Feedback button logic  *******************************/
-  const handleButtonClick = async (functionName) => {
+  const handleButtonClick = async functionName => {
     console.log(`Button pressed: ${functionName}`);
-    switch(functionName) {
-      case "feedback-thumbs-up":
-        setInput("");
+    switch (functionName) {
+      case 'feedback-thumbs-up':
+        setInput('');
         setFeedbackInfo({ message, functionName });
         setUpSelected(!upSelected);
         setDownSelected(false);
@@ -85,8 +91,8 @@ const FeedbackRow = ({ question, message, messageIndex, resubmitQuestion, enable
           setShowInput(!showInput);
         }
         break;
-      case "feedback-thumbs-down":
-        setInput("");
+      case 'feedback-thumbs-down':
+        setInput('');
         setFeedbackInfo({ message, functionName });
         setUpSelected(false);
         setDownSelected(!downSelected);
@@ -96,35 +102,35 @@ const FeedbackRow = ({ question, message, messageIndex, resubmitQuestion, enable
           setShowInput(!showInput);
         }
         break;
-      case "feedback-refresh":
-        resubmitQuestion(question, messageIndex-1); // ask Chat parent to resubmit question
+      case 'feedback-refresh':
+        resubmitQuestion(question, messageIndex - 1); // ask Chat parent to resubmit question
         break;
-      case "feedback-copy":
+      case 'feedback-copy':
         try {
           const htmlContent = markdownRef.current.innerHTML; // full HTML styling
           const textContent = markdownRef.current.innerText; // plain text version
           // copy as both plain text and HTML so rich text markdown styling can be retained
           navigator.clipboard.write([
             new ClipboardItem({
-              "text/plain": new Blob([textContent], { type: "text/plain" }),
-              "text/html": new Blob([htmlContent], { type: "text/html" })
-            })
+              'text/plain': new Blob([textContent], { type: 'text/plain' }),
+              'text/html': new Blob([htmlContent], { type: 'text/html' }),
+            }),
           ]);
           // copy button visual feedback
           setCopyPressed(true);
           setTimeout(() => {
             setCopyPressed(false);
           }, 200);
-          console.log("Copied to clipboard");
+          console.log('Copied to clipboard');
         } catch (e) {
-          console.log("Error copying: ", e);
+          console.log('Error copying: ', e);
         }
         break;
-      case "feedback-email":
+      case 'feedback-email':
         loadEmail();
         break;
       default:
-        console.error("Function name %s is not defined.", functionName);
+        console.error('Function name %s is not defined.', functionName);
     }
   };
 
@@ -133,8 +139,8 @@ const FeedbackRow = ({ question, message, messageIndex, resubmitQuestion, enable
   };
 
   /***********Feedback input field logic ***************************************/
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
+  const handleKeyDown = e => {
+    if (e.key === 'Enter') {
       handleSendMessage(e);
     }
   };
@@ -143,18 +149,16 @@ const FeedbackRow = ({ question, message, messageIndex, resubmitQuestion, enable
     if (input.trim()) {
       console.log(input);
       const { chatbotResponse, functionName } = feedbackInfo;
-      console.log(
-        `Sending message with feedback info: ${chatbotResponse}, ${functionName}`
-      );
-      setInput("");
-      setFeedbackInfo({ chatbotResponse: "", functionName: "" });
+      console.log(`Sending message with feedback info: ${chatbotResponse}, ${functionName}`);
+      setInput('');
+      setFeedbackInfo({ chatbotResponse: '', functionName: '' });
       setShowInput(false);
       setUpSelected(false);
       setDownSelected(false);
       setQButtonsVisible(false);
       console.log(input);
       setIsChatReady(false);
-      const reply = await invoke("send_feedback", {
+      const reply = await invoke('send_feedback', {
         feedback: input,
         question: question,
         type: functionName,
@@ -162,7 +166,7 @@ const FeedbackRow = ({ question, message, messageIndex, resubmitQuestion, enable
       });
       await updateTable(); // update file list to include uploaded feedback
       setIsChatReady(true);
-      console.log("feedback reply: ", reply);
+      console.log('feedback reply: ', reply);
       setFeedbackReceived(true);
       setTimeout(() => {
         setFeedbackReceived(false);
@@ -193,14 +197,16 @@ const FeedbackRow = ({ question, message, messageIndex, resubmitQuestion, enable
   return (
     <div className="feedbackrow">
       <div className="topfeedbackrow">
+        {metricsContext && <div className="metrics-style">{metricsContext}</div>}
+
         <div className="feedback-buttons-column">
           {logos.map((logo, index) => (
             <div key={index}>
               {
                 <button
                   className={`feedback-button ${logo.function} ${
-                    upSelected ? "up" : downSelected ? "down" : ""
-                  } ${logo.function === "feedback-copy" && copyPressed ? "copy-active" : ""}`}
+                    upSelected ? 'up' : downSelected ? 'down' : ''
+                  } ${logo.function === 'feedback-copy' && copyPressed ? 'copy-active' : ''}`}
                   alt={logo.alt}
                   onClick={() => handleButtonClick(logo.function)} // Add the onClick event handler
                   disabled={!isChatReady}
@@ -218,31 +224,24 @@ const FeedbackRow = ({ question, message, messageIndex, resubmitQuestion, enable
             <input
               ref={inputRef}
               type="text"
-              placeholder={
-                upSelected ? t('feedback.placeholder_1') :
-                t('feedback.placeholder_2')
-              }
+              placeholder={upSelected ? t('feedback.placeholder_1') : t('feedback.placeholder_2')}
               value={input}
               onKeyDown={handleKeyDown}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={e => setInput(e.target.value)}
               className="enter-your-feedback"
               data-testid="feedback-input-field"
             />
 
             <button
               onClick={handleSendMessage}
-              className={`feedback-send-button ${
-                upSelected ? "up" : downSelected ? "down" : ""
-              }`}
+              className={`feedback-send-button ${upSelected ? 'up' : downSelected ? 'down' : ''}`}
               data-testid="feedback-send-input-button"
             />
           </div>
         )}
         {emailAppend && (
           <span
-            className={`email-appended-message ${
-              fadeOut ? "email-appended-message-fade-out" : ""
-            }`}
+            className={`email-appended-message ${fadeOut ? 'email-appended-message-fade-out' : ''}`}
           >
             {t('feedback.copy_to_email')}
           </span>
@@ -251,11 +250,9 @@ const FeedbackRow = ({ question, message, messageIndex, resubmitQuestion, enable
         {feedbackReceived && (
           <span
             className={`feedback-received-message ${
-              fadeOut ? "feedback-received-message-fade-out" : ""
+              fadeOut ? 'feedback-received-message-fade-out' : ''
             } ${
-              feedbackColor
-                ? "feedback-received-message-green"
-                : "feedback-received-message-red"
+              feedbackColor ? 'feedback-received-message-green' : 'feedback-received-message-red'
             }`}
           >
             {t('feedback.feedback_received')}

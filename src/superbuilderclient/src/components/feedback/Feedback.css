@@ -1,39 +1,39 @@
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
-.feedbackrow{
-    display: flex;
-    flex-direction: column;
+.feedbackrow {
+  display: flex;
+  flex-direction: column;
 }
-.topfeedbackrow{
-    display: inline-flex;
-    justify-content: flex-end;
-    width: 98%;
-    padding-left: 1%
+.topfeedbackrow {
+  display: inline-flex;
+  justify-content: flex-end;
+  width: 98%;
+  padding-left: 1%;
 }
-.bottomfeedbackrow{
-    justify-content: flex-end;
-    display: flex; 
+.bottomfeedbackrow {
+  justify-content: flex-end;
+  display: flex;
 }
 
-.quick-buttons-column{
-    flex: 1;
+.quick-buttons-column {
+  flex: 1;
 }
-.quick-button{
-    width: fit-content;
-    padding: 2px 20px 2px 20px;
-    border: 1px solid #999999;
-    margin-right: 10px;
-    border-radius: 5px;
-    color: #999999;
-    background-color: #ffffff;
-    animation: fadeIn 0.5s forwards;
+.quick-button {
+  width: fit-content;
+  padding: 2px 20px 2px 20px;
+  border: 1px solid #999999;
+  margin-right: 10px;
+  border-radius: 5px;
+  color: #999999;
+  background-color: #ffffff;
+  animation: fadeIn 0.5s forwards;
 }
 /* .quick-button.up{
     border: 2px solid #8bae46;
@@ -42,210 +42,222 @@
     border: 2px solid #edb200;
 } */
 
-.feedback-buttons-column{
-    width: 500px;
-    display: flex;
-    justify-content: flex-end;
-    flex-direction: row !important;
+.feedback-buttons-column {
+  /* width: 500px; */
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: row !important;
 }
 
-.feedback-email{
-    width: 17px;
-    height: 17px;
-    margin-right: 10px;
-    background-color: transparent; /* Sets the background color to transparent */
-    border: none; /* Removes the border */
+.feedback-email {
+  width: 17px;
+  height: 17px;
+  margin-right: 10px;
+  background-color: transparent; /* Sets the background color to transparent */
+  border: none; /* Removes the border */
 }
 
-.feedback-button{
-    width: 17px;
-    height: 17px;
-    margin-right: 10px;
-    background-color: transparent; /* Sets the background color to transparent */
-    border: none; /* Removes the border */
-    cursor: pointer;
+.feedback-button {
+  width: 17px;
+  height: 17px;
+  margin-right: 10px;
+  background-color: transparent; /* Sets the background color to transparent */
+  border: none; /* Removes the border */
+  cursor: pointer;
 }
-.feedback-button:disabled{
-    opacity: 0.3;
-    cursor: default;
+.feedback-button:disabled {
+  opacity: 0.3;
+  cursor: default;
 }
-.feedback-button.feedback-thumbs-up{
-    background-image: url('../../assets/images/feedback/normal_thumbs_up_icon_u73.svg');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+.feedback-button.feedback-thumbs-up {
+  background-image: url('../../assets/images/feedback/normal_thumbs_up_icon_u73.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
-.feedback-button.feedback-thumbs-up:not(:disabled):hover{
-    background-image: url('../../assets/images/feedback/mouseover_thumbs_up_icon_u73_mouseover.svg');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+.feedback-button.feedback-thumbs-up:not(:disabled):hover {
+  background-image: url('../../assets/images/feedback/mouseover_thumbs_up_icon_u73_mouseover.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
-.feedback-button.feedback-thumbs-up.up{
-    background-image: url('../../assets/images/feedback/mouseover_thumbs_up_icon_u73_mouseover.svg');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+.feedback-button.feedback-thumbs-up.up {
+  background-image: url('../../assets/images/feedback/mouseover_thumbs_up_icon_u73_mouseover.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
-.feedback-button.feedback-thumbs-down{
-    background-image: url('../../assets/images/feedback/normal_thumbs_down_icon_u74.svg');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+.feedback-button.feedback-thumbs-down {
+  background-image: url('../../assets/images/feedback/normal_thumbs_down_icon_u74.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
-.feedback-button.feedback-thumbs-down:not(:disabled):hover{
-    background-image: url('../../assets/images/feedback/mouseover_thumbs_down_icon_u74_mouseover.svg');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+.feedback-button.feedback-thumbs-down:not(:disabled):hover {
+  background-image: url('../../assets/images/feedback/mouseover_thumbs_down_icon_u74_mouseover.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
-.feedback-button.feedback-thumbs-down.down{
-    background-image: url('../../assets/images/feedback/mouseover_thumbs_down_icon_u74_mouseover.svg');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+.feedback-button.feedback-thumbs-down.down {
+  background-image: url('../../assets/images/feedback/mouseover_thumbs_down_icon_u74_mouseover.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
-.feedback-button.feedback-divider{
-    background-image: url('../../assets/images/feedback/normal_u72.svg');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+.feedback-button.feedback-divider {
+  background-image: url('../../assets/images/feedback/normal_u72.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
-.feedback-button.feedback-refresh{
-    background-image: url('../../assets/images/feedback/normal_u75.svg');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+.feedback-button.feedback-refresh {
+  background-image: url('../../assets/images/feedback/normal_u75.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
-.feedback-button.feedback-refresh:not(:disabled):hover{
-    background-image: url('../../assets/images/feedback/mouseover_u75_mouseover.svg');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+.feedback-button.feedback-refresh:not(:disabled):hover {
+  background-image: url('../../assets/images/feedback/mouseover_u75_mouseover.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
-.feedback-button.feedback-copy{
-    background-image: url('../../assets/images/feedback/normal_u70.svg');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+.feedback-button.feedback-copy {
+  background-image: url('../../assets/images/feedback/normal_u70.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
-.feedback-button.feedback-copy:not(:disabled):hover{
-    background-image: url('../../assets/images/feedback/mouseover_u70_mouseover.svg');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+.feedback-button.feedback-copy:not(:disabled):hover {
+  background-image: url('../../assets/images/feedback/mouseover_u70_mouseover.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
-.feedback-button.feedback-download{
-    background-image: url('../../assets/images/feedback/normal_u71.svg');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+.feedback-button.feedback-download {
+  background-image: url('../../assets/images/feedback/normal_u71.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
-.feedback-button.feedback-download:not(:disabled):hover{
-    background-image: url('../../assets/images/feedback/mouseover_u71_mouseover.svg');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+.feedback-button.feedback-download:not(:disabled):hover {
+  background-image: url('../../assets/images/feedback/mouseover_u71_mouseover.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
-.feedback-button.feedback-share{
-    background-image: url('../../assets/images/feedback/normal_u80.svg');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+.feedback-button.feedback-share {
+  background-image: url('../../assets/images/feedback/normal_u80.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
-.feedback-button.feedback-share:not(:disabled):hover{
-    background-image: url('../../assets/images/feedback/mouseover_u80_mouseover.svg');
-    background-repeat: no-repeat;
-    background-position: center;
+.feedback-button.feedback-share:not(:disabled):hover {
+  background-image: url('../../assets/images/feedback/mouseover_u80_mouseover.svg');
+  background-repeat: no-repeat;
+  background-position: center;
 }
 .feedback-chat-container {
-    display: flex;
-    width: 98%;
-    padding-right: 1%;
+  display: flex;
+  width: 98%;
+  padding-right: 1%;
 }
 .feedback-received-message-green {
-    opacity: 1;
-    color: green; 
-    margin-right: 10px;
-    /* Other styles as needed */
+  opacity: 1;
+  color: green;
+  margin-right: 10px;
+  /* Other styles as needed */
 }
 .feedback-received-message-red {
-    opacity: 1;
-    color: #c00000; 
-    margin-right: 10px;
+  opacity: 1;
+  color: #c00000;
+  margin-right: 10px;
 }
 
 /* Class to apply when the message should fade out */
 .feedback-received-message-fade-out {
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out; /* Smooth transition for the opacity */
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out; /* Smooth transition for the opacity */
 }
 .email-appended-message-fade-out {
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out; /* Smooth transition for the opacity */
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out; /* Smooth transition for the opacity */
 }
 .email-appended-message {
-    opacity: 0.8;    
-    color: #666; 
-    margin-left: auto;
-    font-size: 0.8em;
-    /* Other styles as needed */
+  opacity: 0.8;
+  color: #666;
+  margin-left: auto;
+  font-size: 0.8em;
+  /* Other styles as needed */
 }
 .enter-your-feedback {
-    width: 100%;
-    height: 35px;
-    margin-top: 5px;
-    border: 1px solid #d7d7d7;
-    box-sizing: border-box;
-    text-align: left;
-    padding-left: 1%;
-    font-size: 14px;
-    color: #999999;
-    background-color: #ffffff;
-    animation: fadeIn 0.5s forwards;
+  width: 100%;
+  height: 35px;
+  margin-top: 5px;
+  border: 1px solid #d7d7d7;
+  box-sizing: border-box;
+  text-align: left;
+  padding-left: 1%;
+  font-size: 14px;
+  color: #999999;
+  background-color: #ffffff;
+  animation: fadeIn 0.5s forwards;
 }
 .enter-your-feedback::placeholder {
-    color: #adadad;
+  color: #adadad;
 }
 .enter-your-feedback:focus {
   outline: none;
 }
-.feedback-send-button{
-    position: relative;
-    cursor: pointer;
-    width: 45px;
-    height: 35px;
-    margin-top: 5px;
-    background-image: url('../../assets/images/normal_u6.svg');
-    background-size: 10px 10px;
-    background-repeat: no-repeat;
-    background-position: center;
-    border: none;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-    box-sizing: border-box;
-    animation: fadeIn 0.5s forwards;
+.feedback-send-button {
+  position: relative;
+  cursor: pointer;
+  width: 45px;
+  height: 35px;
+  margin-top: 5px;
+  background-image: url('../../assets/images/normal_u6.svg');
+  background-size: 10px 10px;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: none;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  box-sizing: border-box;
+  animation: fadeIn 0.5s forwards;
 }
 .feedback-send-button.up {
-    background-color: #8bae46; 
+  background-color: #8bae46;
 }
 .feedback-send-button.down {
-    background-color: #edb200; 
+  background-color: #edb200;
 }
 
-.feedback-button.feedback-email{
-    background-image: url('../../assets/images/feedback/email_normal.svg');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+.feedback-button.feedback-email {
+  background-image: url('../../assets/images/feedback/email_normal.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
-.feedback-button.feedback-email:hover{
-    background-image: url('../../assets/images/feedback/email_hover.svg');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+.feedback-button.feedback-email:hover {
+  background-image: url('../../assets/images/feedback/email_hover.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .feedback-button.feedback-copy.copy-active {
   opacity: 0.2;
+}
+
+.metrics-style {
+  white-space: nowrap;
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  color: #666666;
+  margin-right: 20px;
+  line-height: 17px;
+  display: flex;
+  align-items: center;
+  height: 17px;
 }

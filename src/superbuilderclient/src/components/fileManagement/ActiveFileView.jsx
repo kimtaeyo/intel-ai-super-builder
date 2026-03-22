@@ -280,7 +280,17 @@ const ActiveFileView = ({
 
   // Every time the file list from the file context is updated, refresh this file table with the new data OR session switches
   useEffect(() => {
-    setFiles(createFileRows(rows));
+    const newFiles = createFileRows(rows);
+    setFiles(newFiles);
+
+    // Prune active files that no longer exist in the updated file list
+    // (e.g. after an embedding model switch that wipes the vector database)
+    const validFileIds = new Set(newFiles.map(file => file.id));
+    const prunedActiveFiles = activeFiles.filter(id => validFileIds.has(id));
+    if (prunedActiveFiles.length !== activeFiles.length) {
+      handleSelectionChange(prunedActiveFiles);
+    }
+
     selectFeedback(); // always select feedback on refresh for now
   }, [rows]);
 
@@ -347,11 +357,9 @@ const ActiveFileView = ({
     return (
       <Box sx={{ position: 'relative', display: 'inline-flex' }}>
         <CircularProgress
-          color={cancel || fileStatus === "removing" ? "error" : "primary"}
-          variant={
-            currentFile === "" || cancel ? "indeterminate" : "determinate"
-          }
-          data-testid="file-handle-progress-container" 
+          color={cancel || fileStatus === 'removing' ? 'error' : 'primary'}
+          variant={currentFile === '' || cancel ? 'indeterminate' : 'determinate'}
+          data-testid="file-handle-progress-container"
           {...props}
         />
         <Box

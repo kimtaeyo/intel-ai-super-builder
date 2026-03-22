@@ -7,15 +7,14 @@
   flex-direction: column;
   box-sizing: border-box;
   background-color: var(--bg-color);
-  display: none; 
+  display: none;
   justify-content: space-between;
-  padding: 8px 0 20px 0;
+  padding: 4px 0 20px 0;
   gap: 8px;
   z-index: 999;
   overflow: hidden;
   height: 98%;
 }
-
 
 .marketplace-panel.open {
   display: flex;
@@ -37,21 +36,58 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 16px;
-  padding: 16px 20px 2px 20px;
-  margin-bottom: 0;
+  padding: 12px 24px;
   border-bottom: 1px solid var(--divider-color);
   background-color: var(--bg-color);
   flex-shrink: 0;
+  height: 64px;
+  box-sizing: border-box;
+}
+
+.marketplace-header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+  z-index: 2;
+}
+
+.marketplace-header-center {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.marketplace-header-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  flex: 1;
+  z-index: 2;
+  height: 37px;
 }
 
 .marketplace-search-container {
-  flex: 1;
-  max-width: 400px;
+  width: 160px;
   display: flex;
   flex-direction: column;
-  margin-left: auto;
-  margin-right: 12px;
+  position: relative;
+}
+
+.mcp-header-btn {
+  font-size: 13px !important;
+  padding: 4px 12px !important;
+  height: 32px !important;
+  min-width: 150px !important;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .marketplace-content {
@@ -86,7 +122,9 @@
   height: 300px;
   display: flex;
   flex-direction: column;
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  transition:
+    transform 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out;
   border: 1px solid var(--divider-color);
   overflow: hidden;
 }
@@ -224,9 +262,9 @@
   animation: float 3s ease-in-out infinite;
 }
 
-
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px);
   }
   50% {
@@ -235,11 +273,11 @@
 }
 
 .intro-title {
-  color: #1D63ED;
+  color: #1d63ed;
   margin-bottom: 0.5rem;
 }
 
-.intro-subtitle{
+.intro-subtitle {
   font-weight: 400;
   margin-bottom: 1.5rem;
 }
@@ -276,7 +314,7 @@
   font-weight: 600;
   text-transform: none;
   border-radius: 30px;
-  background: linear-gradient(135deg, #1976d2 0%, #1D63ED 100%);
+  background: linear-gradient(135deg, #1976d2 0%, #1d63ed 100%);
   box-shadow: 0 4px 15px rgba(25, 118, 210, 0.4);
   transition: all 0.3s ease;
   overflow: hidden;
@@ -307,7 +345,7 @@
   .marketplace-grid {
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   }
-  
+
   .marketplace-search-container {
     max-width: 300px;
   }
@@ -317,12 +355,12 @@
   .marketplace-grid {
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   }
-  
+
   .marketplace-header {
     flex-wrap: wrap;
     padding: 12px 16px;
   }
-  
+
   .marketplace-search-container {
     order: 3;
     flex-basis: 100%;
@@ -356,13 +394,13 @@
   .marketplace-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .card-description {
     -webkit-line-clamp: 2;
     line-clamp: 2;
     min-height: 40px;
   }
-  
+
   .card-keywords .MuiChip-root {
     font-size: 0.7rem;
   }

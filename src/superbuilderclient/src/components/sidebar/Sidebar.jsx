@@ -1,50 +1,59 @@
-import "./Sidebar.css";
-import React, { useState, useEffect, useContext, useRef, use } from "react";
-import { invoke } from "@tauri-apps/api/core";
-import { ChatContext } from "../context/ChatContext";
-import { WorkflowContext } from "../context/WorkflowContext";
-import useDataStore from "../../stores/DataStore";
-import useMcpStore from "../../stores/McpStore";
-import SettingsIcon from "@mui/icons-material/Settings";
-import NewWorkflowIcon from "@mui/icons-material/AddCircle";
-import HistoryIcon from "@mui/icons-material/History";
-import AdminIcon from "@mui/icons-material/ManageAccounts";
-import McpMarketplaceIcon from "@mui/icons-material/LocalMall";
-import MCPIcon from "../../assets/mcpIcon/Mcpicon";
-import { useTranslation } from "react-i18next";
-import McpManagement from "../mcpManagement/McpManagement";
-import McpMarketPlace from "../mcpManagement/McpMarketPlace";
-import { ChatHistory } from "./ChatHistory";
-import WorkflowOptions from "../workflows/WorkflowOptions";
-import SidebarOverlay from "./SidebarOverlay";
-import Setting from "../setting/Setting";
+import './Sidebar.css';
+import React, { useState, useEffect, useContext, useRef, use } from 'react';
+import { invoke } from '@tauri-apps/api/core';
+import { ChatContext } from '../context/ChatContext';
+import { WorkflowContext } from '../context/WorkflowContext';
+import useDataStore from '../../stores/DataStore';
+import useMcpStore from '../../stores/McpStore';
+import SettingsIcon from '@mui/icons-material/Settings';
+import NewWorkflowIcon from '@mui/icons-material/AddCircle';
+import HistoryIcon from '@mui/icons-material/History';
+import AdminIcon from '@mui/icons-material/ManageAccounts';
+import McpMarketplaceIcon from '@mui/icons-material/LocalMall';
+import MCPIcon from '../../assets/mcpIcon/Mcpicon';
+import { useTranslation } from 'react-i18next';
+import McpManagement from '../mcpManagement/McpManagement';
+import McpMarketPlace from '../mcpManagement/McpMarketPlace';
+import { ChatHistory } from './ChatHistory';
+import WorkflowOptions from '../workflows/WorkflowOptions';
+import SidebarOverlay from './SidebarOverlay';
+import Setting from '../setting/Setting';
+import HelpIcon from '@mui/icons-material/Help';
+import BugReportIcon from '@mui/icons-material/BugReport';
+import HelpGuideIcon from '@mui/icons-material/School';
+import LicenseInfoIcon from '@mui/icons-material/Policy';
+import ModalWrapper from '../generalUseModal/generalUseModal';
+import ModelLink from '../modelLink/ModelLink';
+import { Typography, Link } from '@mui/material';
+import { openUrl } from '@tauri-apps/plugin-opener';
+import { exists } from '@tauri-apps/plugin-fs';
+import { EmailWindowContext } from '../context/EmailWindowContext';
 
 const Sidebar = ({}) => {
   const { t } = useTranslation();
-  const { config, getDBConfig } = useDataStore();
-  const { newSession, isChatReady, newChatModelNeeded } =
-    useContext(ChatContext);
-  const {
-    workflowSidebarVisible: isWorkflowOpen,
-    setWorkflowSidebarVisible: setIsWorkflowOpen,
-  } = useContext(WorkflowContext);
+  const { config, getDBConfig, system_info, assistant, assistantName } = useDataStore();
+  const { newSession, isChatReady, newChatModelNeeded } = useContext(ChatContext);
+  const { openBugReport } = useContext(EmailWindowContext);
+  const [isInfoOpen, setIsInfoOpen] = useState(false);
+  const { workflowSidebarVisible: isWorkflowOpen, setWorkflowSidebarVisible: setIsWorkflowOpen } =
+    useContext(WorkflowContext);
   const [isSettingOpen, setIsSettingOpen] = useState(false); // setting popout panel
   const [isHistoryOpen, setIsHistoryOpen] = useState(false); // chat history popout panel
   const sidebarRef = useRef(null);
   const [settingVisibility, setSettingVisibility] = useState(false);
-  const mcpMarketplaceOpen = useMcpStore((state) => state.mcpMarketplaceOpen);
-  const mcpManagementOpen = useMcpStore((state) => state.mcpManagementOpen);
+  const mcpMarketplaceOpen = useMcpStore(state => state.mcpMarketplaceOpen);
+  const mcpManagementOpen = useMcpStore(state => state.mcpManagementOpen);
 
   const handleSetAdmin = async () => {
     const shallowNewData = Object.keys(config).reduce((acc, key) => {
-      if (typeof config[key] !== "object" || config[key] === null) {
+      if (typeof config[key] !== 'object' || config[key] === null) {
         acc[key] = config[key];
       }
       return acc;
     }, {});
     shallowNewData.is_admin = !config.is_admin;
     const viewModel = JSON.stringify(shallowNewData);
-    await invoke("set_user_config_view_model", { vm: viewModel });
+    await invoke('set_user_config_view_model', { vm: viewModel });
     getDBConfig();
   };
 
@@ -107,26 +116,40 @@ const Sidebar = ({}) => {
     useMcpStore.getState().closeMcpManagement();
   };
 
+  const toggleInfo = () => setIsInfoOpen(!isInfoOpen);
+
+  const openHelpGuide = async () => {
+    await openUrl(
+      'https://aibuilder.intel.com/Intel%20AI%20Assistant%20Builder%20User%20Guide.pdf'
+    );
+  };
+
+  const openOSSFolder = async () => {
+    try {
+      let folderPath = 'C:\\Program Files\\Intel Corporation\\Intel(R) AI Super Builder\\oss_info';
+      const pathExists = await exists(folderPath);
+      if (!pathExists) {
+        console.error('Path does not exist:', folderPath);
+        return;
+      }
+      await invoke('open_in_explorer', { path: folderPath });
+    } catch (error) {
+      console.error('Error opening folder:', error);
+    }
+  };
+
   useEffect(() => {
     setSettingVisibility(config.is_admin);
   }, [config]);
 
   useEffect(() => {
-    if (
-      isChatReady == false &&
-      newChatModelNeeded == true &&
-      isSettingOpen == false
-    ) {
+    if (isChatReady == false && newChatModelNeeded == true && isSettingOpen == false) {
       handleSetting();
     }
   }, [isChatReady, newChatModelNeeded, isSettingOpen]);
 
   const isOpen =
-    isSettingOpen ||
-    isHistoryOpen ||
-    isWorkflowOpen ||
-    mcpMarketplaceOpen ||
-    mcpManagementOpen;
+    isSettingOpen || isHistoryOpen || isWorkflowOpen || mcpMarketplaceOpen || mcpManagementOpen;
 
   const SidebarBox = ({
     isChatReady,
@@ -135,6 +158,7 @@ const Sidebar = ({}) => {
     toggleWorkflow,
     toggleMarketplace,
     toggleManagement,
+    toggleInfo,
     settingVisibility,
   }) => {
     const { t } = useTranslation();
@@ -143,7 +167,7 @@ const Sidebar = ({}) => {
       title,
       icon,
       onClick,
-      additionalClasses = "",
+      additionalClasses = '',
       'data-testid': dataTestId,
     }) => {
       return (
@@ -163,23 +187,19 @@ const Sidebar = ({}) => {
       <div className="sidebarbox" data-testid="sidebar-main-container">
         <SidebarButton
           additionalClasses="new-chat-button"
-          title={t("sidebar.new_chat")}
+          title={t('sidebar.new_chat')}
           onClick={() => {
             if (isChatReady) {
               toggleWorkflow();
             }
           }}
           icon={
-            <NewWorkflowIcon
-              className="sidebar-icon"
-              color="primary"
-              sx={{ fontSize: "50px" }}
-            />
+            <NewWorkflowIcon className="sidebar-icon" color="primary" sx={{ fontSize: '50px' }} />
           }
           data-testid="sidebar-new-chat-button"
         />
         <SidebarButton
-          title={t("sidebar.chat_history")}
+          title={t('sidebar.chat_history')}
           onClick={() => {
             if (isChatReady) {
               toggleHistory();
@@ -201,23 +221,15 @@ const Sidebar = ({}) => {
           data-testid="sidebar-mcp-management-button"
         /> */}
         <div className="spacer"></div>
-        <div className="admin">
-          <SidebarButton
-            title={
-              t("sidebar.admin_mode") +
-              " - " +
-              (config.is_admin
-                ? t("sidebar.mode_enable")
-                : t("sidebar.mode_disable"))
-            }
-            onClick={handleSetAdmin}
-            icon={<AdminIcon className="sidebar-icon" fontSize="large" />}
-            data-testid="sidebar-admin-toggle-button"
-          />
-        </div>
+        <SidebarButton
+          title={t('sidebar.help')}
+          onClick={toggleInfo}
+          icon={<HelpIcon className="sidebar-icon" fontSize="large" />}
+          data-testid="sidebar-help-button"
+        />
         {settingVisibility && (
           <SidebarButton
-            title={t("sidebar.setting")}
+            title={t('sidebar.setting')}
             onClick={toggleSetting}
             icon={<SettingsIcon className="sidebar-icon" fontSize="large" />}
             data-testid="sidebar-settings-button"
@@ -242,6 +254,7 @@ const Sidebar = ({}) => {
           toggleWorkflow={() => handleWorkflow()}
           toggleMarketplace={() => handleMarketplace()}
           toggleManagement={() => handleManagement()}
+          toggleInfo={toggleInfo}
           settingVisibility={settingVisibility}
         />
         <Setting
@@ -249,10 +262,94 @@ const Sidebar = ({}) => {
           setIsOpen={setIsSettingOpen}
           onClose={() => setIsSettingOpen(false)}
         />
-        <ChatHistory
-          isOpen={isHistoryOpen}
-          onClose={() => setIsHistoryOpen(false)}
-        />
+        <ModalWrapper
+          isOpen={isInfoOpen}
+          toggleOpen={toggleInfo}
+          header={`${t('topbar.title')} - ${assistantName}`}
+          hideFooter={false}
+          buttonName={t('topbar.content_part_10')}
+          data-testid="sidebar-info-modal"
+        >
+          <div>
+            <div>
+              <div>
+                <Typography variant="body1">
+                  {t('topbar.content_part_1')}{' '}
+                  <Link href="https://www.intel.com/aipc" target="_blank" rel="noopener noreferrer">
+                    {t('topbar.content_part_2')}
+                  </Link>{' '}
+                  {t('topbar.content_part_3')}
+                </Typography>
+                <br />
+                <Typography variant="body1">
+                  {t('topbar.content_part_4')}{' '}
+                  <b>
+                    v{system_info?.CurrentVersion} | {t('topbar.content_part_4_1')}{' '}
+                    <Link
+                      href="https://aibuilder.intel.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {t('topbar.content_part_5')}
+                    </Link>
+                  </b>
+                </Typography>
+                <Typography variant="body1">
+                  {t('topbar.content_part_6')}{' '}
+                  <b className="space-between">{assistant['models']['chat_model']}</b>
+                  <b>
+                    <ModelLink modelName={assistant['models']['chat_model']} />
+                  </b>
+                </Typography>
+                <Typography variant="body1">
+                  {t('topbar.content_part_7')}{' '}
+                  <b className="space-between">{assistant['models']['embedding_model']}</b>
+                  <b>
+                    <ModelLink modelName={assistant['models']['embedding_model']} />
+                  </b>
+                </Typography>
+                <Typography variant="body1">
+                  {t('topbar.content_part_8')}{' '}
+                  <b className="space-between">{assistant['models']['ranker_model']}</b>
+                  <b>
+                    <ModelLink modelName={assistant['models']['ranker_model']} />
+                  </b>
+                </Typography>
+              </div>
+              <br />
+              <Link
+                component="button"
+                variant="body1"
+                onClick={openBugReport}
+                data-testid="sidebar-report-bug-button"
+              >
+                <BugReportIcon sx={{ pr: 1 }} />
+                {'Report a bug'}
+              </Link>
+              <br />
+              <Link
+                component="button"
+                variant="body1"
+                onClick={openHelpGuide}
+                data-testid="sidebar-help-guide-button"
+              >
+                <HelpGuideIcon sx={{ pr: 1 }} />
+                {'View the user guide'}
+              </Link>
+              <br />
+              <Link
+                component="button"
+                variant="body1"
+                onClick={openOSSFolder}
+                data-testid="sidebar-license-info-button"
+              >
+                <LicenseInfoIcon sx={{ pr: 1 }} />
+                {t('topbar.content_part_9')}
+              </Link>
+            </div>
+          </div>
+        </ModalWrapper>
+        <ChatHistory isOpen={isHistoryOpen} onClose={() => setIsHistoryOpen(false)} />
         <McpMarketPlace
           isOpen={mcpMarketplaceOpen}
           onClose={() => {

@@ -282,7 +282,7 @@ const Setting = ({ isOpen, setIsOpen, onClose }) => {
     },
   ];
 
-  const updateUIColorConfiguration = async resetUXSettings => {
+  const updateUIColorConfiguration = async (resetUXSettings, updatedConfig = null) => {
     setAssistantConfigUpdating(true);
     const newData = { ...config };
 
@@ -305,7 +305,11 @@ const Setting = ({ isOpen, setIsOpen, onClose }) => {
     newData.ActiveAssistant['logo_image'] = assistantLogo;
     console.debug('new logo image: ', assistantLogo);
 
-    newData.ActiveAssistant[uiColorSelectedConfig] = uiColorSelected;
+    if (updatedConfig) {
+      newData.ActiveAssistant[updatedConfig.key] = updatedConfig.value;
+    } else if (uiColorSelectedConfig) {
+      newData.ActiveAssistant[uiColorSelectedConfig] = uiColorSelected;
+    }
     console.log('New Assistant Config: ', newData);
     await invoke('set_assistant_view_model', {
       vm: JSON.stringify(newData.ActiveAssistant),
@@ -422,18 +426,27 @@ const Setting = ({ isOpen, setIsOpen, onClose }) => {
   };
 
   const handleUploadLogo = async () => {
-    const selectedLogo = await open({
-      filters: [{ name: 'Images', extensions: ['jpg', 'png', 'jpeg'] }],
-      multiple: false,
-      title: 'Select a Logo',
-    });
+    let selectedLogo;
+    if (window.__TEST_MOCK_LOGO_PATH__) {
+      console.log('[Test] Using mocked logo path:', window.__TEST_MOCK_LOGO_PATH__);
+      selectedLogo = window.__TEST_MOCK_LOGO_PATH__;
+      window.__TEST_MOCK_LOGO_PATH__ = null;
+    } else {
+      selectedLogo = await open({
+        filters: [{ name: 'Images', extensions: ['jpg', 'png', 'jpeg'] }],
+        multiple: false,
+        title: 'Select a Logo',
+      });
+    }
+
     if (selectedLogo) {
       console.log('Selected logo:', selectedLogo);
-      await invoke('open_file_and_return_as_base64', {
+      const response = await invoke('open_file_and_return_as_base64', {
         filename: selectedLogo,
-      }).then(response => {
-        useDataStore.getState().setAssistantLogo(`data:image/png;base64, ${response}`);
       });
+      const newLogo = `data:image/png;base64, ${response}`;
+      useDataStore.getState().setAssistantLogo(newLogo);
+      await updateUIColorConfiguration(false, { key: 'logo_image', value: newLogo });
     }
   };
 
@@ -564,150 +577,6 @@ const Setting = ({ isOpen, setIsOpen, onClose }) => {
 
       <div className="setting-content">
         <SimpleAccordion
-          title={t('setting.appearance.title')}
-          description={t('setting.appearance.description')}
-          data-testid="appearance-accordion"
-        >
-          <TextField
-            className="assistant-rename"
-            label={t('setting.name')}
-            value={assistantName}
-            onChange={handleInputChange}
-            onKeyDown={handleRenameKeyDown}
-            onBlur={() => updateAssistantName()}
-            disabled={configUpdating}
-            data-testid="assistant-name-input"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton edge="end" aria-label="edit">
-                    <EditIcon />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-          <Typography className="color-picker-label">{t('setting.visuals.title')}</Typography>
-          <Card orientation="vertical" className="assistant-configuration-switch-card">
-            <Typography className="visual-label" id="logo-label">
-              <b>{t('setting.visuals.logo')}</b>
-            </Typography>
-            <Divider className="visual-divider" />
-            <div className="logo-setting-container">
-              <div className="logo-display">
-                <AssistantLogo />
-              </div>
-              <Button
-                variant="contained"
-                style={{ width: '100%' }}
-                onClick={() => {
-                  handleUploadLogo();
-                }}
-                data-testid="logo-upload-button"
-              >
-                {t('setting.visuals.logo_update')}
-              </Button>
-            </div>
-
-            <Typography className="visual-label" id="color-label">
-              <b>{t('setting.visuals.color.title')}</b>
-            </Typography>
-            <Divider className="visual-divider" />
-            {uiColorConfigurable.map(uiconfig => (
-              <div key={uiconfig.key} className="ui-configuration-row">
-                <Typography>{uiconfig.label}</Typography>
-                <input
-                  type="color"
-                  value={assistant ? assistant[uiconfig.key] : '#ffffff'}
-                  onChange={event => {
-                    setUIColorSelectedConfig(uiconfig.key);
-                    setUIColorSelected(event.target.value);
-                    const newAssistantConfig = { ...config };
-                    console.warn(uiconfig, event.target.value);
-                    newAssistantConfig.ActiveAssistant[uiconfig.key] = event.target.value;
-                    console.warn('newAssistantConfig from UI', newAssistantConfig);
-                    setConfig(newAssistantConfig);
-                    setAssistant(newAssistantConfig.ActiveAssistant);
-                  }}
-                  size="s"
-                  variant="action"
-                  title={t('setting.visuals.color.pick')}
-                  className="ui-configuration-color-palette"
-                  disabled={configUpdating}
-                  data-testid={`color-picker-${uiconfig.key}`}
-                />
-              </div>
-            ))}
-            <Typography className="visual-label" id="color-label">
-              <b>{t('setting.visuals.language.title')}</b>
-            </Typography>
-            <Divider className="visual-divider" />
-            <Card orientation="vertical" className="model-switch-card">
-              <div className="info-container">
-                <FormControl fullWidth>
-                  <InputLabel>{t('setting.visuals.language.subtitle')}</InputLabel>
-                  <Select
-                    value={selectedLng}
-                    label={t('setting.visuals.language.subtitle')}
-                    onChange={e => changeLanguage(e.target.value)}
-                    data-testid="language-select"
-                  >
-                    {languageOptions.map(option => (
-                      <MenuItem key={option.key} value={option.key}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-                <Typography className="model-upload-warning-label"></Typography>
-              </div>
-            </Card>
-            <div className="button-group">
-              <Button
-                key="reset_assistant_uiconfiguration"
-                variant="outlined"
-                onClick={() => updateUIColorConfiguration(true)}
-                disabled={configUpdating}
-                data-testid="visual-settings-reset-button"
-              >
-                {t('setting.visuals.button.reset')}
-              </Button>
-              <Button
-                key="apply_assistant_uiconfiguration"
-                variant="contained"
-                onClick={() => updateUIColorConfiguration(false)} // Pass a function reference
-                disabled={configUpdating}
-                data-testid="visual-settings-apply-button"
-              >
-                {t('setting.visuals.button.apply')}
-              </Button>
-            </div>
-          </Card>
-        </SimpleAccordion>
-
-        <SimpleAccordion
-          title={t('setting.versionandupdate.title')}
-          description={t('setting.versionandupdate.description')}
-          data-testid="version-update-accordion"
-        >
-          <Card orientation="vertical" className="app-version-card">
-            <div className="app-version-info">
-              <Typography>{t('setting.versionandupdate.subtitle')}</Typography>
-              <Typography>{sysInfo?.CurrentVersion}</Typography>
-            </div>
-            <Button
-              variant="contained"
-              style={{ width: '100%', marginTop: 10 }}
-              key="check_for_update"
-              onClick={toggleModal}
-              data-testid="check-for-update-button"
-            >
-              {t('setting.versionandupdate.button')}
-            </Button>
-          </Card>
-        </SimpleAccordion>
-
-        <SimpleAccordion
           title={t('setting.models.title')}
           description={t('setting.models.description')}
           data-testid="models-accordion"
@@ -722,7 +591,7 @@ const Setting = ({ isOpen, setIsOpen, onClose }) => {
                   onClick={toggleUploadModelInfo}
                   isButton={true}
                 />
-                <Typography>{t('setting.models.upload.title')}</Typography>
+                <Typography sx={{ fontWeight: 'bold', fontSize: '14px', paddingBottom: '4px' }}>{t('setting.models.upload.title')}</Typography>
               </div>
               <FormControl component="fieldset" className="small-form-control">
                 <div className="radio-group-with-label">
@@ -824,6 +693,147 @@ const Setting = ({ isOpen, setIsOpen, onClose }) => {
           )}
         </SimpleAccordion>
 
+        <ModelSettings />
+
+        <SimpleAccordion
+          title={t('setting.appearance.title')}
+          description={t('setting.appearance.description')}
+          data-testid="appearance-accordion"
+        >
+          <TextField
+            className="assistant-rename"
+            label={t('setting.name')}
+            value={assistantName}
+            onChange={handleInputChange}
+            onKeyDown={handleRenameKeyDown}
+            onBlur={() => updateAssistantName()}
+            disabled={configUpdating}
+            data-testid="assistant-name-input"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton edge="end" aria-label="edit">
+                    <EditIcon />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+          <Typography className="color-picker-label">{t('setting.visuals.title')}</Typography>
+          <Card orientation="vertical" className="assistant-configuration-switch-card">
+            <Typography className="visual-label" id="logo-label">
+              <b>{t('setting.visuals.logo')}</b>
+            </Typography>
+            <Divider className="visual-divider" />
+            <div className="logo-setting-container">
+              <div className="logo-display">
+                <AssistantLogo />
+              </div>
+              <Button
+                variant="contained"
+                style={{ width: '100%' }}
+                onClick={() => {
+                  handleUploadLogo();
+                }}
+                data-testid="logo-upload-button"
+              >
+                {t('setting.visuals.logo_update')}
+              </Button>
+            </div>
+
+            <Typography className="visual-label" id="color-label">
+              <b>{t('setting.visuals.color.title')}</b>
+            </Typography>
+            <Divider className="visual-divider" />
+            {uiColorConfigurable.map(uiconfig => (
+              <div key={uiconfig.key} className="ui-configuration-row">
+                <Typography>{uiconfig.label}</Typography>
+                <input
+                  type="color"
+                  value={assistant ? assistant[uiconfig.key] : '#ffffff'}
+                  onChange={event => {
+                    const newColor = event.target.value;
+                    setUIColorSelectedConfig(uiconfig.key);
+                    setUIColorSelected(newColor);
+                    const newAssistantConfig = { ...config };
+                    newAssistantConfig.ActiveAssistant[uiconfig.key] = newColor;
+                    setConfig(newAssistantConfig);
+                    setAssistant(newAssistantConfig.ActiveAssistant);
+                    updateUIColorConfiguration(false, { key: uiconfig.key, value: newColor });
+                  }}
+                  size="s"
+                  variant="action"
+                  title={t('setting.visuals.color.pick')}
+                  className="ui-configuration-color-palette"
+                  disabled={configUpdating}
+                  data-testid={`color-picker-${uiconfig.key}`}
+                />
+              </div>
+            ))}
+            <Typography className="visual-label" id="color-label">
+              <b>{t('setting.visuals.language.title')}</b>
+            </Typography>
+            <Divider className="visual-divider" />
+            <Card orientation="vertical" className="model-switch-card">
+              <div className="info-container">
+                <FormControl fullWidth>
+                  <InputLabel>{t('setting.visuals.language.subtitle')}</InputLabel>
+                  <Select
+                    value={selectedLng}
+                    label={t('setting.visuals.language.subtitle')}
+                    onChange={e => changeLanguage(e.target.value)}
+                    data-testid="language-select"
+                  >
+                    {languageOptions.map(option => (
+                      <MenuItem key={option.key} value={option.key}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <Typography className="model-upload-warning-label"></Typography>
+              </div>
+            </Card>
+            <div className="button-group">
+              <Button
+                key="reset_assistant_uiconfiguration"
+                variant="outlined"
+                onClick={() => updateUIColorConfiguration(true)}
+                disabled={configUpdating}
+                data-testid="visual-settings-reset-button"
+              >
+                {t('setting.visuals.button.reset')}
+              </Button>
+            </div>
+          </Card>
+        </SimpleAccordion>
+
+        <ConfImportExport />
+
+        <SimpleAccordion
+          title={t('setting.versionandupdate.title')}
+          description={t('setting.versionandupdate.description')}
+          data-testid="version-update-accordion"
+        >
+          <Card orientation="vertical" className="app-version-card">
+            <div className="app-version-info">
+              <Typography>{t('setting.versionandupdate.subtitle')}</Typography>
+              <Typography>{sysInfo?.CurrentVersion}</Typography>
+            </div>
+            <Button
+              variant="contained"
+              style={{ width: '100%', marginTop: 10 }}
+              key="check_for_update"
+              onClick={toggleModal}
+              data-testid="check-for-update-button"
+            >
+              {t('setting.versionandupdate.button')}
+            </Button>
+          </Card>
+        </SimpleAccordion>
+
+        <SystemInfoCard />
+
         {isNPUAlert && (
           <ModalWrapper
             isOpen={isNPUAlert}
@@ -846,12 +856,6 @@ const Setting = ({ isOpen, setIsOpen, onClose }) => {
             </div>
           </ModalWrapper>
         )}
-
-        <ModelSettings />
-
-        <SystemInfoCard />
-
-        <ConfImportExport />
       </div>
     </div>
   );

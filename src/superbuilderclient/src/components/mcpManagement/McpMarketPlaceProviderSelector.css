@@ -1,8 +1,12 @@
 .marketplace-provider-selector {
   display: flex;
   align-items: center;
-  min-height: 40px;
   cursor: pointer;
+  height: 37px;
+}
+
+.marketplace-provider-selector .MuiInputBase-root {
+  height: 37px;
 }
 
 .provider-menu-item {

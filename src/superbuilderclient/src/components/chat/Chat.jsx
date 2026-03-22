@@ -1,22 +1,22 @@
-import React, { useEffect, useState, useRef, useContext } from "react";
-import "./Chat.css";
-import AssistantLogo from "../assistantLogo/assistantLogo";
-import FeedbackRow from "../feedback/Feedback";
-import DragAndDrop from "../dragAndDrop/DragAndDrop";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { materialDark } from "react-syntax-highlighter/dist/esm/styles/prism"; // Choose any style
-import StopCircleOutlinedIcon from "@mui/icons-material/StopCircleOutlined";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { ChatContext } from "../context/ChatContext";
-import { invoke } from "@tauri-apps/api/core";
-import { IconButton, Typography, Link } from "@mui/material";
-import useDataStore from "../../stores/DataStore";
-import { useTranslation } from "react-i18next";
-import i18n from "i18next";
-import ChatInput from "./ChatInput";
+import React, { useEffect, useState, useRef, useContext } from 'react';
+import './Chat.css';
+import AssistantLogo from '../assistantLogo/assistantLogo';
+import FeedbackRow from '../feedback/Feedback';
+import DragAndDrop from '../dragAndDrop/DragAndDrop';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { materialDark } from 'react-syntax-highlighter/dist/esm/styles/prism'; // Choose any style
+import StopCircleOutlinedIcon from '@mui/icons-material/StopCircleOutlined';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { ChatContext } from '../context/ChatContext';
+import { invoke } from '@tauri-apps/api/core';
+import { IconButton, Typography, Link } from '@mui/material';
+import useDataStore from '../../stores/DataStore';
+import { useTranslation } from 'react-i18next';
+import i18n from 'i18next';
+import ChatInput from './ChatInput';
 
 const CodeBlock = ({ language, value }) => {
   return (
@@ -29,11 +29,11 @@ const CodeBlock = ({ language, value }) => {
 const ThinkingBlock = React.memo(({ thinking, thinkingComplete = false, isExpanded, onToggle }) => {
   const { t } = useTranslation();
 
-  if (!thinking || thinking.trim() === "") {
+  if (!thinking || thinking.trim() === '') {
     return null;
   }
 
-  const label = thinkingComplete ? t("chat.thought") : t("chat.thinking");
+  const label = thinkingComplete ? t('chat.thought') : t('chat.thinking');
 
   return (
     <div className="thinking-container">
@@ -51,39 +51,41 @@ const ThinkingBlock = React.memo(({ thinking, thinkingComplete = false, isExpand
             )}
           </span>
         </div>
-        <IconButton
-          size="small"
-          className="thinking-toggle"
-        >
+        <IconButton size="small" className="thinking-toggle">
           {isExpanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
         </IconButton>
       </div>
       {isExpanded && (
         <div className="thinking-content">
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>
-            {thinking}
-          </ReactMarkdown>
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>{thinking}</ReactMarkdown>
         </div>
       )}
     </div>
   );
 });
 
-const ChatMessage = ({ text, references = [], openFile, markdownRef, thinking, thinkingComplete }) => {
+const ChatMessage = ({
+  text,
+  references = [],
+  openFile,
+  markdownRef,
+  thinking,
+  thinkingComplete,
+}) => {
   const [isThinkingExpanded, setIsThinkingExpanded] = useState(false);
-  
+
   const handleToggleThinking = React.useCallback(() => {
     setIsThinkingExpanded(prev => !prev);
   }, []);
-  
-  const getFileLink = (reference) => {
+
+  const getFileLink = reference => {
     return `${reference.file}`;
   };
 
   const getFileName = (filepath, page, sheet) => {
-    let filepathSplit = filepath.split("\\");
+    let filepathSplit = filepath.split('\\');
     let filename = filepathSplit[filepathSplit.length - 1];
-    if (sheet != null && sheet != "") {
+    if (sheet != null && sheet != '') {
       return "Sheet '" + sheet + "' of User Document: '" + filename + "'"; // add table sheet name if there is one
     } else if (page != null && page > 0) {
       return "Page '" + page + "' of User Document: '" + filename + "'"; // return filename and page number
@@ -93,12 +95,12 @@ const ChatMessage = ({ text, references = [], openFile, markdownRef, thinking, t
   };
 
   // Convert both literal \n and actual newlines to proper markdown line breaks
-  const processedText = text.replace(/\\n/g, "\n").replace(/\n/g, "  \n");
+  const processedText = text.replace(/\\n/g, '\n').replace(/\n/g, '  \n');
 
   return (
     <div className="chat-message" data-testid="chat-message-container">
-      <ThinkingBlock 
-        thinking={thinking} 
+      <ThinkingBlock
+        thinking={thinking}
         thinkingComplete={thinkingComplete}
         isExpanded={isThinkingExpanded}
         onToggle={handleToggleThinking}
@@ -109,11 +111,11 @@ const ChatMessage = ({ text, references = [], openFile, markdownRef, thinking, t
           remarkPlugins={[remarkGfm]}
           components={{
             code({ node, inline, className, children, ...props }) {
-              const match = /language-(\w+)/.exec(className || "");
+              const match = /language-(\w+)/.exec(className || '');
               return !inline && match ? (
                 <CodeBlock
                   language={match[1]}
-                  value={String(children).replace(/\n$/, "")}
+                  value={String(children).replace(/\n$/, '')}
                   {...props}
                 />
               ) : (
@@ -125,10 +127,7 @@ const ChatMessage = ({ text, references = [], openFile, markdownRef, thinking, t
             img({ node, ...props }) {
               return (
                 <div className="chat-image">
-                  <img
-                    src={`data:image/png;base64, ${props.src}`}
-                    alt={props.alt || "Image"}
-                  />
+                  <img src={`data:image/png;base64, ${props.src}`} alt={props.alt || 'Image'} />
                 </div>
               );
             },
@@ -149,12 +148,7 @@ const ChatMessage = ({ text, references = [], openFile, markdownRef, thinking, t
             },
             a({ href, children, ...props }) {
               return (
-                <Link
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  {...props}
-                >
+                <Link href={href} target="_blank" rel="noopener noreferrer" {...props}>
                   {children}
                 </Link>
               );
@@ -174,7 +168,7 @@ const ChatMessage = ({ text, references = [], openFile, markdownRef, thinking, t
                   variant="body1"
                   underline="hover"
                   onClick={() => openFile(getFileLink(reference))}
-                  sx={{fontSize: "14px"}}
+                  sx={{ fontSize: '14px' }}
                   data-testid={`chat-reference-file-link-${index}`}
                 >
                   {getFileName(reference.file, reference.page, reference.sheet)}
@@ -188,20 +182,31 @@ const ChatMessage = ({ text, references = [], openFile, markdownRef, thinking, t
   );
 };
 
-const ChatBlock = ({ message, index, messages, isWaitingForFirstToken, handleResubmit, enableFeedback, enableEmail, handleOpenFileLocation, t }) => {
+const ChatBlock = ({
+  message,
+  index,
+  messages,
+  isWaitingForFirstToken,
+  handleResubmit,
+  enableFeedback,
+  enableEmail,
+  handleOpenFileLocation,
+  t,
+}) => {
   const markdownRef = useRef(null);
+  const metricsContext = message.metrics || null;
   return (
     <div>
       <div className={`message ${message.sender}`}>
         <div className="sender-logo">
-          {message.sender !== "user" ? (
+          {message.sender !== 'user' ? (
             <AssistantLogo />
           ) : (
             <div className={`sender-logo ${message.sender}`} />
           )}
         </div>
         <div className={`message-text ${message.sender}`}>
-          {message.sender === "assistant" ? (
+          {message.sender === 'assistant' ? (
             <ChatMessage
               text={message.text}
               references={message.references}
@@ -213,18 +218,16 @@ const ChatBlock = ({ message, index, messages, isWaitingForFirstToken, handleRes
           ) : (
             message.text
           )}
-          {message.sender !== "user" &&
-            index === messages.length - 1 &&
-            isWaitingForFirstToken && (
-              <div className="loading-container">
-                <div className="loading-spinner"></div>
-                <p>{t("chat.processing")}</p>
-              </div>
-            )}
+          {message.sender !== 'user' && index === messages.length - 1 && isWaitingForFirstToken && (
+            <div className="loading-container">
+              <div className="loading-spinner"></div>
+              <p>{t('chat.processing')}</p>
+            </div>
+          )}
         </div>
       </div>
       <div>
-        {index !== 0 && message.sender !== "user" ? (
+        {index !== 0 && message.sender !== 'user' ? (
           <FeedbackRow
             question={messages[index - 1].text}
             message={message.text}
@@ -233,6 +236,7 @@ const ChatBlock = ({ message, index, messages, isWaitingForFirstToken, handleRes
             enableSendFeedback={enableFeedback}
             enableEmail={enableEmail}
             markdownRef={markdownRef}
+            metricsContext={metricsContext}
           />
         ) : (
           <div />
@@ -244,42 +248,40 @@ const ChatBlock = ({ message, index, messages, isWaitingForFirstToken, handleRes
 
 const Chat = ({
   readyToChat = true,
-  defaultValue = "",
-  placeholder = "Enter your prompt",
+  defaultValue = '',
+  placeholder = 'Enter your prompt',
   activeFiles = [],
-  queryType = "Generic",
+  queryType = 'Generic',
   onMessageSend = () => {},
   onResubmitSend = () => {},
   enableFeedback = false,
-  enableEmail = true
+  enableEmail = true,
 }) => {
-  const { messages, sendMessage, isWaitingForFirstToken, isChatReady } =
-    useContext(ChatContext);
+  const { messages, sendMessage, isWaitingForFirstToken, isChatReady } = useContext(ChatContext);
 
   const { t } = useTranslation();
   const { assistant } = useDataStore();
 
   const endRef = useRef();
 
-  const handleOpenFileLocation = async (filePath) => {
+  const handleOpenFileLocation = async filePath => {
     try {
       // console.log(`Opening file ${filePath}...`);
-      await invoke("open_in_explorer", { path: filePath });
+      await invoke('open_in_explorer', { path: filePath });
     } catch (error) {
-      console.error("Error opening file location:", error);
+      console.error('Error opening file location:', error);
     }
   };
 
   const scrollToBottom = () => {
-    endRef.current?.scrollIntoView({ behavior: "smooth" });
+    endRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
-  const grayedOutClass =
-    assistant?.models["chat_model"] == "chat_model" ? "grayed-out" : "";
+  const grayedOutClass = assistant?.models['chat_model'] == 'chat_model' ? 'grayed-out' : '';
   const className = `chat-container ${grayedOutClass}`;
 
   // Handle sending a question again on Feedback row resubmit
@@ -289,7 +291,7 @@ const Chat = ({
     onResubmitSend();
   };
 
-  const handleSendMessage = (prompt) => {
+  const handleSendMessage = prompt => {
     if (!isChatReady) return;
     sendMessage(prompt, -1, activeFiles, { name: queryType }); // send chat message to Tauri Chat API with no resubmit index
     onMessageSend();
@@ -300,9 +302,9 @@ const Chat = ({
       {/* Messages area */}
       <div className="messages-container">
         {messages.map((message, index) => (
-          <ChatBlock 
+          <ChatBlock
             key={message.id}
-            message={message} 
+            message={message}
             index={index}
             messages={messages}
             isWaitingForFirstToken={isWaitingForFirstToken}

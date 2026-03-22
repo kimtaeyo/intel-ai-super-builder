@@ -235,7 +235,7 @@ async fn fetch_modelscope_mcp_servers(
         .put(url)
         .header("Content-Type", "application/json")
         .header("Accept", "application/json")
-        .header("User-Agent", "IntelAIA/2.7.0")
+        .header("User-Agent", "IntelAIA/2.8.0")
         .json(&request_body)
         .send()
         .await
