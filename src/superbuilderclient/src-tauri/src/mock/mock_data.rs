@@ -29,7 +29,7 @@ pub fn get_mock_config() -> String {
                     "model_type": "ranker_model"
                 }
             ],
-            "parameters": "{\"categories\":[{\"name\":\"llm_params\",\"description\":\"LLM generation parameters\",\"fields\":[{\"name\":\"max_token\",\"type\":\"slider\",\"value\":1024,\"min\":100,\"max\":2048},{\"name\":\"temperature\",\"type\":\"slider\",\"value\":0.0,\"min\":0.0,\"max\":1.0}]},{\"name\":\"rag_params\",\"description\":\"RAG parameters\",\"fields\":[{\"name\":\"retriever_top_k\",\"type\":\"slider\",\"value\":10,\"min\":1,\"max\":50},{\"name\":\"reranker_top_k\",\"type\":\"slider\",\"value\":5,\"min\":1,\"max\":20}]}]}",
+            "parameters": "{\"categories\":[{\"name\":\"llm_params\",\"description\":\"LLM generation parameters\",\"fields\":[{\"name\":\"max_token\",\"type\":\"slider\",\"value\":1024,\"min\":100,\"max\":2048},{\"name\":\"temperature\",\"type\":\"slider\",\"value\":0.0,\"min\":0.0,\"max\":1.0}]},{\"name\":\"rag_params\",\"description\":\"RAG parameters\",\"fields\":[{\"name\":\"retriever_top_k\",\"type\":\"slider\",\"value\":15,\"min\":1,\"max\":20},{\"name\":\"reranker_top_k\",\"type\":\"slider\",\"value\":10,\"min\":1,\"max\":10}]}]}",
             "features": ["chat", "rag", "file_upload"],
             "recommended_models": "[{\"model\":\"qwen2-7b-instruct\",\"short_name\":\"qwen2-7b\"}]",
             "all_models": [

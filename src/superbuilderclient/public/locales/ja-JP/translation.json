@@ -52,16 +52,17 @@
   "mcp": {
     "ui": {
       "back": "スーパーエージェントに戻る",
-      "mcp_marketplace": "MCPマーケットプレイス",
+      "back-to-manager": "MCPマネージャーに戻る",
+      "mcp_marketplace": "MCPマーケットプレイスから追加",
       "add": "MCPマネージャーに追加",
-      "edit": "MCPサーバー情報を編集",
+      "edit": "MCPサーバーの編集",
       "remove": "MCPサーバーを削除",
       "mcp_server": "MCPサーバー",
       "mcp_server_name": "MCPサーバー名",
       "mcp_server_url": "MCPサーバーURL",
       "mcp_server_env": "環境変数(オプション)",
-      "mcp_server_env_placeholder": "例：MY_ENV_1=My_ENV_VALUE_1 MY_ENV_2=My_ENV_VALUE_2",
-      "mcp_server_env_error": "環境変数の形式はKEY=VALUEである必要があります",
+      "mcp_server_env_placeholder": "例：{\"KEY1\":\"val1\",\"KEY2\":\"val2\"} または KEY1=val1 KEY2=val2",
+      "mcp_server_env_error": "無効な形式。JSON {\"KEY\":\"value\"}、KEY=VALUE、またはKEY:VALUE（スペース区切り）を使用してください",
       "mcp_server_command": "MCPサーバーのコマンド",
       "mcp_server_command_args": "MCPサーバーのコマンド引数(オプション)",
       "mcp_server_info": "MCPサーバーからの情報",
@@ -78,6 +79,7 @@
       "add_agent": "新しいMCPエージェント情報を追加",
       "edit_agent": "MCPエージェント情報を編集",
       "add_agent_button": "エージェントを追加",
+      "header_remove_agent_button": "エージェントを削除",
       "mcp_agent_name": "MCPエージェント名",
       "mcp_agent_description": "説明",
       "mcp_agent_system_prompt": "システムプロンプト",
@@ -88,10 +90,20 @@
       "confirm_remove_message": "選択された設定が削除されます。よろしいですか?",
       "remove_button": "削除",
       "docker_recommendation_title": "推奨：",
-      "docker_recommendation_description": "より高いセキュリティと分離性のために、Docker を使用したコマンド方式で MCP サーバーを追加することを推奨します（Docker Desktop が必要です）。",
+      "docker_recommendation_description": "セキュリティとアイソレーション（分離）を向上させるため、Dockerを使用したCommandメソッドの利用を検討してください（Docker Desktopが必要です）。",
       "docker_recommendation_visit": "訪問",
       "docker_servers_link": "Docker MCP Hub",
-      "docker_recommendation_suffix": "注意：システムにDocker Desktopがインストールされている必要があります。"
+      "docker_recommendation_suffix": "注意：システムにDocker Desktopがインストールされている必要があります。",
+      "guide_button": "クイックガイド",
+      "guide_title": "MCP Manager 入門ガイド",
+      "guide_step1_title": "ステップ1 — MCPサーバーを追加",
+      "guide_step1_desc": "MCPサーバーテーブルの「Add MCP Server」ボタンをクリックし、サーバー名とコマンドを入力してください。すべての必須項目を確認したら「Add」をクリックします。",
+      "guide_step2_title": "ステップ2 — MCPエージェントを追加",
+      "guide_step2_desc": "MCPエージェントテーブルの「Add Agent」ボタンをクリックし、エージェントの名前と説明を入力して、リストから1つ以上のMCPサーバーを選択します。エージェントを起動するには少なくとも1つのサーバーが必要です。",
+      "guide_step3_title": "ステップ3 — MCPエージェントを起動",
+      "guide_step3_desc": "MCPエージェントテーブルで追加したエージェントを見つけ、「Start」ボタンをクリックします。エージェントは設定されたMCPサーバーに接続し、チャットで使用できるようになります。"
+      "cannot_remove_servers_tooltip": "MCPサーバーを削除します。サーバーを使用しているMCPエージェントを先に削除してください。",
+      "cannot_remove_agents_tooltip": "MCPエージェントを削除します。削除する前にMCPエージェントを停止してください。"
     },
     "tools_dialog": {
       "title": "MCP サーバーツール",
@@ -150,7 +162,7 @@
       "installed": "インストール済み",
       "running": "実行中",
       "empty": "利用可能なマーケットプレイスのアイテムがありません",
-      "search": "名前、公開者、キーワードで検索...",
+      "search": "検索",
       "showing_results": "結果を表示",
       "no_results": "結果が見つかりませんでした",
       "clear_search": "検索をクリア",
@@ -302,7 +314,7 @@
         "ranker": "現在のリランカーモデル",
         "ranker_tips": "*変更時に、モデルのダウンロードが必要となる可能性があります",
         "endpoint": "モデルダウンロード エンドポイント",
-        "endpoint_tips1": "ダウンロードに問題がある場合は、別のダウンロード エンドポイントをお試しください。",
+        "endpoint_tips1": "ダウンロードに問題がある場合は別のエンドポイントをお試しください。",
         "endpoint_tips2": "中国本土のユーザーは、modelscopeエンドポイントを選択してください。",
         "no_other_model": "他に利用可能なモデルはありません",
         "loading": "読み込み中 ",
@@ -349,6 +361,12 @@
           "remove": "削除",
           "cancel": "キャンセル"
         }
+      },
+      "embedding_switch": {
+        "title": "埋め込みモデルの切り替え確認",
+        "content": "埋め込みモデルを切り替えると、既存のナレッジベースデータ（ベクトルデータベース）が削除されます。以前に埋め込まれたすべてのドキュメントを再追加する必要があります。続行しますか？",
+        "confirm": "確認",
+        "cancel": "キャンセル"
       }
     },
     "parameters": {

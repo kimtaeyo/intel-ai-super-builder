@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from 'react';
 import {
   Box,
   Typography,
@@ -8,44 +8,39 @@ import {
   TextField,
   InputAdornment,
   Button,
-} from "@mui/material";
-import RefreshIcon from "@mui/icons-material/Refresh";
-import CloseIcon from "@mui/icons-material/Close";
-import SearchIcon from "@mui/icons-material/Search";
-import { useTranslation } from "react-i18next";
-import useMcpStore from "../../stores/McpStore";
-import useAppStore from "../../stores/AppStore";
-import { ChatContext } from "../context/ChatContext";
-import {
-  useMarketplaceProvider,
-  MARKETPLACE_PROVIDERS,
-} from "../../hooks/useMarketPlaceProvider";
-import McpMarketPlaceProviderSelector from "./McpMarketPlaceProviderSelector";
-import ModelScopeGrid from "./ModelScopeGrid";
-import DockerHubGrid from "./DockerHubGrid";
-import "./McpMarketPlace.css";
+} from '@mui/material';
+import ArrowCircleLeft from '@mui/icons-material/ArrowCircleLeft';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import CloseIcon from '@mui/icons-material/Close';
+import SearchIcon from '@mui/icons-material/Search';
+import { useTranslation } from 'react-i18next';
+import useMcpStore from '../../stores/McpStore';
+import useAppStore from '../../stores/AppStore';
+import { ChatContext } from '../context/ChatContext';
+import { useMarketplaceProvider, MARKETPLACE_PROVIDERS } from '../../hooks/useMarketPlaceProvider';
+import McpMarketPlaceProviderSelector from './McpMarketPlaceProviderSelector';
+import ModelScopeGrid from './ModelScopeGrid';
+import DockerHubGrid from './DockerHubGrid';
+import './McpMarketPlace.css';
 
 const McpMarketPlace = ({ isOpen = false, onClose = () => {} }) => {
   const { t } = useTranslation();
   const { isChatReady, setIsChatReady } = useContext(ChatContext);
-  const mcpServers = useMcpStore((state) => state.mcpServers);
-  const runningMcpServers = useMcpStore((state) => state.runningMcpServers);
-  const loadingMcpServers = useMcpStore((state) => state.loadingMcpServers);
+  const mcpServers = useMcpStore(state => state.mcpServers);
+  const runningMcpServers = useMcpStore(state => state.runningMcpServers);
+  const loadingMcpServers = useMcpStore(state => state.loadingMcpServers);
 
-  const marketplaceServers = useMcpStore((state) => state.marketplaceServers);
-  const marketplaceLoading = useMcpStore((state) => state.marketplaceLoading);
-  const getMarketplaceServers = useMcpStore(
-    (state) => state.getMarketplaceServers
-  );
+  const marketplaceServers = useMcpStore(state => state.marketplaceServers);
+  const marketplaceLoading = useMcpStore(state => state.marketplaceLoading);
+  const getMarketplaceServers = useMcpStore(state => state.getMarketplaceServers);
 
   const [processingItems, setProcessingItems] = useState(new Set());
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const { selectedProvider, handleProviderChange, providers } =
-    useMarketplaceProvider();
+  const { selectedProvider, handleProviderChange, providers } = useMarketplaceProvider();
 
   // Filter servers based on search query
-  const filteredServers = marketplaceServers.filter((item) => {
+  const filteredServers = marketplaceServers.filter(item => {
     if (!searchQuery.trim()) return true;
 
     const query = searchQuery.toLowerCase();
@@ -55,7 +50,7 @@ const McpMarketPlace = ({ isOpen = false, onClose = () => {} }) => {
       item.description?.toLowerCase().includes(query) ||
       item.chineseDescription?.toLowerCase().includes(query) ||
       item.publisher?.toLowerCase().includes(query) ||
-      item.keywords?.some((keyword) => keyword.toLowerCase().includes(query))
+      item.keywords?.some(keyword => keyword.toLowerCase().includes(query))
     );
   });
 
@@ -63,7 +58,7 @@ const McpMarketPlace = ({ isOpen = false, onClose = () => {} }) => {
   useEffect(() => {
     if (isOpen) {
       if (selectedProvider === MARKETPLACE_PROVIDERS.MODELSCOPE) {
-        getMarketplaceServers(1, 100, "", "", false);
+        getMarketplaceServers(1, 100, '', '', false);
       } else if (selectedProvider === MARKETPLACE_PROVIDERS.DOCKERHUB) {
       }
     }
@@ -75,32 +70,30 @@ const McpMarketPlace = ({ isOpen = false, onClose = () => {} }) => {
     useMcpStore.getState().openMcpManagement();
   };
 
-  const handleAdd = async (item) => {
+  const handleAdd = async item => {
     if (!isChatReady) return;
 
-    setProcessingItems((prev) => new Set(prev).add(item.id));
+    setProcessingItems(prev => new Set(prev).add(item.id));
     setIsChatReady(false);
 
     try {
-      console.debug("Getting Mcp server info to add:", item.name);
+      console.debug('Getting Mcp server info to add:', item.name);
 
-      const serverinfo = await useMcpStore
-        .getState()
-        .getModelScopeMcpServerById(item.id);
+      const serverinfo = await useMcpStore.getState().getModelScopeMcpServerById(item.id);
 
       if (serverinfo?.length > 0) {
         await Promise.all(
-          serverinfo.map(async (serverConfig) => {
+          serverinfo.map(async serverConfig => {
             // Generate unique server name to avoid conflicts
             const uniqueServerName = useMcpStore
               .getState()
               .generateMcpServerName(serverConfig.name, item.id);
             console.debug(
-              "Adding MCP Server:",
+              'Adding MCP Server:',
               uniqueServerName,
-              "(original:",
+              '(original:',
               serverConfig.name,
-              ")"
+              ')'
             );
 
             // Set the input for the server
@@ -108,8 +101,8 @@ const McpMarketPlace = ({ isOpen = false, onClose = () => {} }) => {
               mcpServerName: uniqueServerName,
               mcpServerCommand: serverConfig.command,
               mcpServerCommandArgs: serverConfig.args ? serverConfig.args : [],
-              mcpServerUrl: serverConfig.url ? serverConfig.url : "",
-              mcpServerEnv: serverConfig.env ? serverConfig.env : "",
+              mcpServerUrl: serverConfig.url ? serverConfig.url : '',
+              mcpServerEnv: serverConfig.env ? serverConfig.env : '',
               mcpServerDisabled: false,
             });
 
@@ -118,21 +111,16 @@ const McpMarketPlace = ({ isOpen = false, onClose = () => {} }) => {
             if (response) {
               useAppStore
                 .getState()
-                .showNotification(
-                  `Successfully added "${uniqueServerName}"`,
-                  "success"
-                );
+                .showNotification(`Successfully added "${uniqueServerName}"`, 'success');
             }
           })
         );
       }
     } catch (error) {
-      console.error("Failed to add MCP Server:", error);
-      useAppStore
-        .getState()
-        .showNotification(`Failed to add "${item.name}": ${error}`, "error");
+      console.error('Failed to add MCP Server:', error);
+      useAppStore.getState().showNotification(`Failed to add "${item.name}": ${error}`, 'error');
     } finally {
-      setProcessingItems((prev) => {
+      setProcessingItems(prev => {
         const newSet = new Set(prev);
         newSet.delete(item.id);
         return newSet;
@@ -140,32 +128,27 @@ const McpMarketPlace = ({ isOpen = false, onClose = () => {} }) => {
       setIsChatReady(true);
     }
   };
-  const handleRemove = async (item) => {
+  const handleRemove = async item => {
     if (!isChatReady) return;
 
-    setProcessingItems((prev) => new Set(prev).add(item.id));
+    setProcessingItems(prev => new Set(prev).add(item.id));
     setIsChatReady(false);
 
     try {
-      console.debug("Removing MCP Server:", item.name);
+      console.debug('Removing MCP Server:', item.name);
 
       // Get the actual server configurations for this marketplace item
-      const marketplaceServersById =
-        useMcpStore.getState().marketplaceServersById;
+      const marketplaceServersById = useMcpStore.getState().marketplaceServersById;
       let serverConfigs = marketplaceServersById[item.id];
 
       // If not cached, fetch the server details
       if (!serverConfigs || serverConfigs.length === 0) {
-        console.debug("Fetching server details for remove:", item.id);
-        serverConfigs = await useMcpStore
-          .getState()
-          .getModelScopeMcpServerById(item.id);
+        console.debug('Fetching server details for remove:', item.id);
+        serverConfigs = await useMcpStore.getState().getModelScopeMcpServerById(item.id);
       }
 
       if (!serverConfigs || serverConfigs.length === 0) {
-        throw new Error(
-          "Could not determine server configurations for this marketplace item"
-        );
+        throw new Error('Could not determine server configurations for this marketplace item');
       }
 
       // Find all added servers that belong to this marketplace item
@@ -178,9 +161,7 @@ const McpMarketPlace = ({ isOpen = false, onClose = () => {} }) => {
           .getState()
           .generateMcpServerName(serverConfig.name, item.id);
 
-        const addedServer = mcpServers.find(
-          (server) => server.server_name === uniqueServerName
-        );
+        const addedServer = mcpServers.find(server => server.name === uniqueServerName);
 
         if (addedServer) {
           // Check if this server is running
@@ -197,12 +178,10 @@ const McpMarketPlace = ({ isOpen = false, onClose = () => {} }) => {
         useAppStore
           .getState()
           .showNotification(
-            `Cannot remove "${
-              item.name
-            }". The following servers are running: ${runningServers.join(
-              ", "
+            `Cannot remove "${item.name}". The following servers are running: ${runningServers.join(
+              ', '
             )}. Please stop them first.`,
-            "warning"
+            'warning'
           );
         return;
       }
@@ -211,24 +190,19 @@ const McpMarketPlace = ({ isOpen = false, onClose = () => {} }) => {
       if (serversToRemove.length === 0) {
         useAppStore
           .getState()
-          .showNotification(
-            `No added servers found for "${item.name}"`,
-            "info"
-          );
+          .showNotification(`No added servers found for "${item.name}"`, 'info');
         return;
       }
 
       // Remove all servers for this marketplace item
       console.debug(
         `Removing ${serversToRemove.length} server(s) for ${item.name}:`,
-        serversToRemove.map((s) => s.server_name)
+        serversToRemove.map(s => s.name)
       );
 
       // Set selected servers for removal
       useMcpStore.getState().setSelectedMcpServer(serversToRemove);
-      useMcpStore
-        .getState()
-        .setSelectedMcpServerId(serversToRemove.map((s) => s.id));
+      useMcpStore.getState().setSelectedMcpServerId(serversToRemove.map(s => s.id));
 
       const response = await useMcpStore.getState().removeMcpServer();
 
@@ -238,22 +212,19 @@ const McpMarketPlace = ({ isOpen = false, onClose = () => {} }) => {
           .showNotification(
             `Successfully removed "${item.name}" (${
               serversToRemove.length
-            } server${serversToRemove.length > 1 ? "s" : ""})`,
-            "success"
+            } server${serversToRemove.length > 1 ? 's' : ''})`,
+            'success'
           );
         // Refresh the local server list which will also update marketplace removed status
         await useMcpStore.getState().getLocalMcpServers();
       }
     } catch (error) {
-      console.error("Failed to remove MCP Server:", error);
+      console.error('Failed to remove MCP Server:', error);
       useAppStore
         .getState()
-        .showNotification(
-          `Failed to remove "${item.name}": ${error.message || error}`,
-          "error"
-        );
+        .showNotification(`Failed to remove "${item.name}": ${error.message || error}`, 'error');
     } finally {
-      setProcessingItems((prev) => {
+      setProcessingItems(prev => {
         const newSet = new Set(prev);
         newSet.delete(item.id);
         return newSet;
@@ -264,77 +235,86 @@ const McpMarketPlace = ({ isOpen = false, onClose = () => {} }) => {
 
   const handleRefresh = () => {
     // Force refresh - bypass cache
-    getMarketplaceServers(1, 100, "", "", true);
+    getMarketplaceServers(1, 100, '', '', true);
     useMcpStore.getState().getLocalMcpServers();
   };
 
   return (
-    <div className={`marketplace-panel ${isOpen ? "open" : ""}`}>
+    <div className={`marketplace-panel ${isOpen ? 'open' : ''}`}>
       <Box className="marketplace-container">
         {/* Header */}
         <Box className="marketplace-header">
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            <Typography variant="h5" component="h1" color="text.primary">
-              {t("mcp.marketplace.title", "MCP Marketplace")}
+          {/* Left: Back Button */}
+          <Box className="marketplace-header-left">
+            <Button variant="contained" className="mcp-header-btn" onClick={handleClose}>
+              <ArrowCircleLeft sx={{ fontSize: '18px' }} />
+              {t('mcp.ui.back-to-manager', 'Back to MCP Manager')}
+            </Button>
+          </Box>
+
+          {/* Center: Title */}
+          <Box className="marketplace-header-center">
+            <Typography
+              variant="h5"
+              component="h1"
+              color="text.primary"
+              sx={{ fontWeight: 'bold' }}
+            >
+              {t('mcp.marketplace.title', 'MCP Marketplace')}
             </Typography>
-            {/* Provider Selector */}
+          </Box>
+
+          {/* Right: Provider Selector, Search & Refresh */}
+          <Box className="marketplace-header-right">
             <McpMarketPlaceProviderSelector
               selectedProvider={selectedProvider}
               onProviderChange={handleProviderChange}
               disabled={marketplaceLoading}
             />
-          </Box>
+            <Box className="marketplace-search-container">
+              <TextField
+                size="small"
+                placeholder={t('mcp.marketplace.search', 'Search...')}
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon fontSize="small" />
+                    </InputAdornment>
+                  ),
+                }}
+                sx={{
+                  width: '100%',
+                  '& .MuiOutlinedInput-root': {
+                    backgroundColor: 'var(--bg-secondary-color, rgba(0, 0, 0, 0.02))',
+                    fontSize: '0.875rem',
+                  },
+                }}
+              />
+              {!marketplaceLoading && searchQuery && (
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  sx={{ mt: 0.5, display: 'block', position: 'absolute', top: '100%', right: 0 }}
+                >
+                  {t(
+                    'mcp.marketplace.showing_results',
+                    `Showing ${filteredServers.length} of ${marketplaceServers.length} items`
+                  )}
+                </Typography>
+              )}
+            </Box>
 
-          {/* Search Bar */}
-          <Box className="marketplace-search-container">
-            <TextField
-              size="small"
-              placeholder={t("mcp.marketplace.search", "Search...")}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon fontSize="small" />
-                  </InputAdornment>
-                ),
-              }}
-              sx={{
-                width: "100%",
-                "& .MuiOutlinedInput-root": {
-                  backgroundColor:
-                    "var(--bg-secondary-color, rgba(0, 0, 0, 0.02))",
-                  fontSize: "0.875rem",
-                },
-              }}
-            />
-            {!marketplaceLoading && searchQuery && (
-              <Typography
-                variant="caption"
-                color="text.secondary"
-                sx={{ mt: 0.5, display: "block" }}
-              >
-                {t(
-                  "mcp.marketplace.showing_results",
-                  `Showing ${filteredServers.length} of ${marketplaceServers.length} items`
-                )}
-              </Typography>
-            )}
-          </Box>
-
-          <Box sx={{ display: "flex", gap: 1, flexShrink: 0 }}>
-            <Tooltip title={t("mcp.marketplace.refresh", "Refresh")}>
+            <Tooltip title={t('mcp.marketplace.refresh', 'Refresh')}>
               <IconButton
                 onClick={handleRefresh}
                 disabled={marketplaceLoading}
                 color="primary"
+                size="small"
+                sx={{ border: '1px solid rgba(0, 0, 0, 0.23)', borderRadius: '4px' }}
               >
                 <RefreshIcon />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title={t("mcp.marketplace.close", "Close")}>
-              <IconButton onClick={handleClose}>
-                <CloseIcon />
               </IconButton>
             </Tooltip>
           </Box>
@@ -346,9 +326,7 @@ const McpMarketPlace = ({ isOpen = false, onClose = () => {} }) => {
           {marketplaceLoading && (
             <Box className="marketplace-loading">
               <CircularProgress />
-              <Typography sx={{ mt: 2 }}>
-                {t("mcp.marketplace.loading", "Loading...")}
-              </Typography>
+              <Typography sx={{ mt: 2 }}>{t('mcp.marketplace.loading', 'Loading...')}</Typography>
             </Box>
           )}
 
@@ -385,12 +363,12 @@ const McpMarketPlace = ({ isOpen = false, onClose = () => {} }) => {
               <SearchIcon sx={{ fontSize: 64, opacity: 0.3 }} />
               <Typography variant="h6" sx={{ mt: 2, opacity: 0.6 }}>
                 {searchQuery
-                  ? t("mcp.marketplace.no_results", `No results found`)
-                  : t("mcp.marketplace.empty", "No items available")}
+                  ? t('mcp.marketplace.no_results', `No results found`)
+                  : t('mcp.marketplace.empty', 'No items available')}
               </Typography>
               {searchQuery && (
-                <Button variant="text" onClick={() => setSearchQuery("")}>
-                  {t("mcp.marketplace.clear_search", "Clear search")}
+                <Button variant="text" onClick={() => setSearchQuery('')}>
+                  {t('mcp.marketplace.clear_search', 'Clear search')}
                 </Button>
               )}
             </Box>

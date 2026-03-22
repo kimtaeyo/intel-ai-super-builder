@@ -1,7 +1,7 @@
 {
   "name": "intel-ai-assistant-ui",
   "private": true,
-  "version": "2.7.0",
+  "version": "2.8.0",
   "type": "module",
   "author": "[Intel Corporation]",
   "license": "MIT",
@@ -33,7 +33,7 @@
     "@tauri-apps/plugin-opener": "^2",
     "@tauri-apps/plugin-shell": "^2.2.0",
     "@tauri-apps/plugin-store": "^2.4.0",
-    "ajv": "^8.18.0",
+    "ajv": "^8.17.1",
     "compare-versions": "^6.1.1",
     "dompurify": "^3.2.3",
     "i18next": "^25.0.1",

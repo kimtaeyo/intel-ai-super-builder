@@ -35,12 +35,15 @@ const useMcpStore = create((set, get) => ({
     set({
       mcpInputOpen: false,
       mcpInputType: "",
-      mcpInputSource: "url",
+      mcpInputSource: "command",
       mcpServerTools: [],
     }),
   setMcpInput: (input) =>
     set({
-      mcpInput: input,
+      mcpInput: {
+        ...input,
+        editingServerName: input.editingServerName || input.mcpServerName,
+      },
     }),
 
   setMcpInputSource: (source) =>
@@ -54,10 +57,17 @@ const useMcpStore = create((set, get) => ({
       const response = await invoke("get_mcp_servers");
       const parsedJSONResult = JSON.parse(response);
       console.log("Parsed MCP Server JSON Result:", parsedJSONResult);
-      set({ mcpServers: parsedJSONResult });
+
+      const serversWithId = parsedJSONResult.map(server => ({
+        ...server,
+        id: server.name
+      }));
+
+
+      set({ mcpServers: serversWithId });
 
       // Save to cache
-      await saveLocalServersCache(parsedJSONResult);
+      await saveLocalServersCache(serversWithId);
 
       // Update the installed status for marketplace servers after fetching local servers
       get().updateMarketplaceInstalledStatus();
@@ -71,7 +81,7 @@ const useMcpStore = create((set, get) => ({
       const server = get().mcpInput;
       console.debug("Adding MCP Server:", server);
       const response = await invoke("add_mcp_server", {
-        serverName: server.mcpServerName.trim(),
+        name: server.mcpServerName.trim(),
         url: server.mcpServerUrl.trim(),
         env: server.mcpServerEnv,
         command: server.mcpServerCommand,
@@ -110,8 +120,8 @@ const useMcpStore = create((set, get) => ({
       const server = get().mcpInput;
       console.debug("Updating MCP Server:", server);
       const response = await invoke("edit_mcp_server", {
-        id: server.mcpServerId,
-        serverName: server.mcpServerName.trim(),
+        editingServerName: server.editingServerName,
+        name: server.mcpServerName.trim(),
         url: server.mcpServerUrl.trim(),
         env: server.mcpServerEnv,
         command: server.mcpServerCommand,
@@ -150,17 +160,16 @@ const useMcpStore = create((set, get) => ({
     try {
       const selectedServers = get().selectedMcpServer;
       for (const server of selectedServers) {
-        console.debug("Removing MCP Server:", server.server_name);
+        const trimmedName = server.name.trim();
+        console.debug("Removing MCP Server (trimmed):", trimmedName);
         const response = await invoke("remove_mcp_server", {
-          serverName: server.server_name,
+          serverName: trimmedName,
         });
         get().getLocalMcpServers();
         if (response === "MCP server removed successfully.") {
-          console.log("MCP Server removed successfully:", server.server_name);
-          // get().getLocalMcpServers(); // Refresh the list after removal
+          console.log("MCP Server removed successfully:", trimmedName);
         }
       }
-      // Clear the selected servers after successful removal
       set({ selectedMcpServer: [] });
       return true;
     } catch (error) {
@@ -168,7 +177,7 @@ const useMcpStore = create((set, get) => ({
       useAppStore
         .getState()
         .showNotification(
-          `Failed to remove MCP Server "${server.server_name}": ${error}`,
+          `Failed to remove MCP Server: ${error}`,
           "error"
         );
       return false;
@@ -181,7 +190,7 @@ const useMcpStore = create((set, get) => ({
       console.debug("Starting MCP Servers...", name);
       set({ loadingMcpServers: [name] });
       const response = await invoke("start_mcp_server", {
-        serverName: name,
+        server_name: name,
       });
       if (response === "MCP server loaded successfully.") {
         console.log("MCP Servers loaded successfully.");
@@ -205,7 +214,7 @@ const useMcpStore = create((set, get) => ({
       console.debug("Stopping MCP Servers...", name);
       set({ loadingMcpServers: [name] });
       const response = await invoke("stop_mcp_server", {
-        serverName: name,
+        server_name: name,
       });
       console.log("Stop MCP Servers Response:", response);
       if (response === `MCP Server(${name}) Stopped`) {
@@ -301,7 +310,7 @@ const useMcpStore = create((set, get) => ({
       // Open dialog if requested and tools were fetched successfully
       if (showDialog && parsedJSONResult.length > 0) {
         // Find the server config
-        const serverConfig = get().mcpServers.find(s => s.server_name === server_name);
+        const serverConfig = get().mcpServers.find(s => s.name === server_name);
 
         set({
           mcpToolsDialogOpen: true,
@@ -347,8 +356,8 @@ const useMcpStore = create((set, get) => ({
     }
   },
 
-  selectedMcpServerId: [],
-  setSelectedMcpServerId: (selected) => set({ selectedMcpServerId: selected }),
+  selectedMcpServerNames: [],
+  setSelectedMcpServerNames: (selected) => set({ selectedMcpServerNames: selected }),
 
   selectedMcpServer: [],
   setSelectedMcpServer: (selected) => set({ selectedMcpServer: selected }),
@@ -402,7 +411,13 @@ const useMcpStore = create((set, get) => ({
       const response = await invoke("get_mcp_agents");
       const parsedJSONResult = JSON.parse(response);
       console.log("Parsed MCP Agents JSON Result:", parsedJSONResult);
-      set({ mcpAgents: parsedJSONResult });
+
+      const agentsWithId = parsedJSONResult.map(agent => ({
+        ...agent,
+        id: agent.name
+      }))
+
+      set({ mcpAgents: agentsWithId });
     } catch (error) {
       console.error("Failed to fetch MCP Servers:", error);
     }
@@ -418,7 +433,7 @@ const useMcpStore = create((set, get) => ({
         agentName: agentInput.agentName.trim(),
         agentDesc: agentInput.description,
         agentMessage: agentInput.systemMessage,
-        serverIds: agentInput.mcpServerIds || [],
+        serverNames: agentInput.mcpServerNames || [],
       });
 
       console.log("Add MCP Agent Response:", response);
@@ -454,11 +469,11 @@ const useMcpStore = create((set, get) => ({
       console.debug("Updating MCP Agent:", agentInput);
 
       const response = await invoke("edit_mcp_agent", {
-        agentId: agentInput.id,
+        editingAgentName: agentInput.editingAgentName,
         agentName: agentInput.agentName,
         agentDesc: agentInput.description,
         agentMessage: agentInput.systemMessage,
-        serverIds: agentInput.mcpServerIds || [],
+        serverNames: agentInput.mcpServerNames || [],
       });
 
       console.log("Update MCP Agent Response:", response);
@@ -518,7 +533,7 @@ const useMcpStore = create((set, get) => ({
       useAppStore
         .getState()
         .showNotification(
-          `Failed to remove MCP Agent "${agent.name}": ${error}`,
+          `Failed to remove MCP Agent: ${error}`,
           "error"
         );
       return false;
@@ -539,15 +554,11 @@ const useMcpStore = create((set, get) => ({
       // Get server_ids from mcpAgents by name
       const mcpAgents = get().mcpAgents;
       const agent = mcpAgents.find((agent) => agent.name === name);
-      const serverIds = agent ? agent.server_ids : [];
-      // Get server names from serverIds using mcpServers
+      const serverNames = agent ? agent.server_names : [];
+
+      // Get server names using mcpServers
       const mcpServers = get().mcpServers;
-      const serverNames = serverIds
-        .map((serverId) => {
-          const server = mcpServers.find((server) => server.id === serverId);
-          return server ? server.server_name : null;
-        })
-        .filter((name) => name !== null);
+      const servers = mcpServers.filter(server => serverNames.includes(server.name));
 
       set({ loadingMcpAgents: [name], loadingMcpServers: serverNames });
       const response = await invoke("start_mcp_agent", {
@@ -677,14 +688,14 @@ const useMcpStore = create((set, get) => ({
     if (cachedServers && cachedServers.length > 0) {
       return cachedServers.some(serverInfo => {
         const uniqueName = get().generateMcpServerName(serverInfo.name, marketplaceItem.id);
-        return mcpServers.some(localServer => localServer.server_name === uniqueName);
+        return mcpServers.some(localServer => localServer.name === uniqueName);
       });
     }
 
     // Fallback: check if any server name contains the marketplace item ID
     // This handles cases where we haven't fetched the details yet
     return mcpServers.some((server) => {
-      return server.server_name.endsWith(`_${marketplaceItem.id}`);
+      return server.name.endsWith(`_${marketplaceItem.id}`);
     });
   },
 

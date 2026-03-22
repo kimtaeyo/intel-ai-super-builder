@@ -24,16 +24,23 @@ const ConfImportExport = () => {
   const [exportedFilename, setExportedFilename] = useState("");
 
   const handleImport = async () => {
-    const file = await open({
-      multiple: false,
-      directory: false,
-      filters: [
-        {
-          name: "Intel AIA config file",
-          extensions: ["aia"],
-        },
-      ],
-    });
+    let file;
+    if (window.__TEST_MOCK_CONFIG_IMPORT_PATH__) {
+      console.log('[Test] Using mocked config import file path:', window.__TEST_MOCK_CONFIG_IMPORT_PATH__);
+      file = window.__TEST_MOCK_CONFIG_IMPORT_PATH__;
+      window.__TEST_MOCK_CONFIG_IMPORT_PATH__ = null;
+    } else {
+      file = await open({
+        multiple: false,
+        directory: false,
+        filters: [
+          {
+            name: "Intel AIA config file",
+            extensions: ["aia"],
+          },
+        ],
+      });
+    }
     if (file) {
       console.log(file);
       const importResult = await useDataStore.getState().importConfig(file);
@@ -50,10 +57,17 @@ const ConfImportExport = () => {
   };
 
   const handleExport = async () => {
-    const path = await open({
-      multiple: false,
-      directory: true,
-    });
+    let path;
+    if (window.__TEST_MOCK_CONFIG_EXPORT_PATH__) {
+      console.log('[Test] Using mocked config export path:', window.__TEST_MOCK_CONFIG_EXPORT_PATH__);
+      path = window.__TEST_MOCK_CONFIG_EXPORT_PATH__;
+      window.__TEST_MOCK_CONFIG_EXPORT_PATH__ = null;
+    } else {
+      path = await open({
+        multiple: false,
+        directory: true,
+      });
+    }
     if (path) {
       console.log(path);
       setExportPath(path);
@@ -74,6 +88,7 @@ const ConfImportExport = () => {
       <SimpleAccordion
         title={t("setting.confimportexport.title")}
         description={t("setting.confimportexport.description")}
+        data-testid='export-import-accordion'
       >
         <Card
           sx={{

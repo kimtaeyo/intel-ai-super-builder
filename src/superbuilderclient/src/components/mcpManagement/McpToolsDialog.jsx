@@ -98,7 +98,7 @@ const McpToolsDialog = () => {
 
   // Get current server config and tools
   const currentServerConfig = mcpServers.find(
-    (server) => server.server_name === currentServerName
+    (server) => server.name === currentServerName
   );
   const currentTools = mcpServerTools[currentServerName] || [];
 
@@ -129,12 +129,17 @@ const McpToolsDialog = () => {
                   variant="text"
                   onClick={handleReject}
                   color="error"
+                  data-testid="mcp-tools-dialog-reject-btn"
                 >
                   {t("mcp.tools_dialog.reject")}
                 </Button>
               </div>
               <div className="button">
-                <Button size="m" variant="contained" onClick={handleConfirm}>
+                <Button size="m" variant="contained" 
+                  onClick={handleConfirm}
+                  key={`confirm-btn-${mcpToolsDialogNeedsConfirmation}`} 
+                  data-testid="mcp-tools-dialog-confirm-btn"
+                >
                   {t("mcp.tools_dialog.confirm")}
                 </Button>
               </div>

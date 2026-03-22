@@ -260,7 +260,7 @@ async fn fetch_modelscope_mcp_servers(
         .put(url)
         .header("Content-Type", "application/json")
         .header("Accept", "application/json")
-        .header("User-Agent", "IntelAIA/2.7.0")
+        .header("User-Agent", "IntelAIA/2.8.0")
         .json(&request_body)
         .send()
         .await
@@ -307,7 +307,7 @@ async fn fetch_modelscope_mcp_by_id(
         .get(url)
         .header("Content-Type", "application/json")
         .header("Accept", "application/json")
-        .header("User-Agent", "IntelAIA/2.7.0")
+        .header("User-Agent", "IntelAIA/2.8.0")
         .send()
         .await
         .map_err(|e| format!("Request failed: {}", e))?;
@@ -400,6 +400,14 @@ pub async fn run() {
 
     let app = tauri::Builder
         ::default()
+        // NOTE: plugins run in the order they are registered; keep single-instance first.
+        .plugin(tauri_plugin_single_instance::init(|app, _argv, _cwd| {
+            if let Some(window) = app.get_webview_window("main") {
+                let _ = window.show();
+                let _ = window.unminimize();
+                let _ = window.set_focus();
+            }
+        }))
         .plugin(tauri_plugin_clipboard_manager::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_fs::init())
